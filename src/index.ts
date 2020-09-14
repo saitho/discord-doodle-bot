@@ -12,11 +12,13 @@ var bot: CommandoClient = new CommandoClient({
 
 bot.registry
     .registerGroups([
-        ["bot", "Meta"]
+        ["bot", "Meta"],
+        ["doodle", "Doodle"]
     ])
     .registerDefaults()
     .registerCommandsIn(path.join(__dirname, 'commands'))
-    .registerTypesIn(path.join(__dirname, 'types'));
+    //.registerTypesIn(path.join(__dirname, 'types'))
+    ;
 
 sqlite.open(path.join(__dirname, 'database.sqlite3')).then(database => {
     bot.setProvider(new SQLiteProvider(database));
