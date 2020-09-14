@@ -23,7 +23,15 @@ module.exports = class InfoCommand extends Command {
 
     async run(msg: CommandMessage, args) {
         const code = DoodleUtility.extractDoodleCode(args.url)
-        // todo: remove poll from database
-        return msg.channel.send("Removed poll from list." + code)
+
+        let polls: string[] = await this.client.provider.get(msg.guild, "polls") ?? []
+        const pollPos = polls.indexOf(code)
+        if (pollPos === -1) {
+            return msg.channel.send("Poll not in list.")
+        }
+
+        await this.client.provider.set(msg.guild, "polls", polls.filter((item) => item !== code))
+        await this.client.provider.remove(msg.guild, "poll_" + code)
+        return msg.channel.send("Removed poll from list.")
     }
 }

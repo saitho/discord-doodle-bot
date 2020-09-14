@@ -1,4 +1,4 @@
-import { CommandoClient, Command, CommandMessage } from "discord.js-commando";
+import {CommandoClient, Command, CommandMessage} from "discord.js-commando";
 import {DoodleUtility} from "../../utility/doodle";
 
 module.exports = class InfoCommand extends Command {
@@ -23,7 +23,14 @@ module.exports = class InfoCommand extends Command {
 
     async run(msg: CommandMessage, args) {
         const code = DoodleUtility.extractDoodleCode(args.url)
-        // todo: add poll to database
-        return msg.channel.send("Added poll to list." + code)
+
+        const polls: string[] = await this.client.provider.get(msg.guild, "polls") ?? []
+        if (polls.indexOf(code) !== -1) {
+            return msg.channel.send("Poll already in list.");
+        }
+        await this.client.provider.set(msg.guild, "polls", [...polls, code])
+
+        await this.client.provider.set(msg.guild, "poll_" + code, await new DoodleUtility().extractVotes(code))
+        return msg.channel.send("Added poll to list.")
     }
 }

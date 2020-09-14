@@ -9,12 +9,13 @@
   "author": "abyssal512",
   "license": "MIT",
   "dependencies": {
+    "axios": "^0.20.0",
     "discord.js": "^11.6.4",
     "discord.js-commando": "^0.10.0",
     "sqlite": "^3.0.6"
   },
   "devDependencies": {
-    "nodemon": "^2.0.4",
-    "@types/node": "^12.12.58"
+    "@types/node": "^12.12.58",
+    "nodemon": "^2.0.4"
   }
 }
