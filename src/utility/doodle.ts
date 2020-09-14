@@ -5,28 +5,10 @@ export interface DiscordParticipant extends DoodleParticipant {
     readableDates: {date: string; type: Number}[];
 }
 
-export class DoodleReducedResult {
-    protected code: string;
-    protected participants: DiscordParticipant[] = [];
-
-    public constructor(code: string) {
-        this.code = code;
-    }
-
-    public addParticipant(participant: DoodleParticipant, indexDateMap: Map<Number, string>) {
-        const dates = participant.preferences
-            .filter((value) => value !== DoodlePreferencesType.NO)
-            .map((item, index) => {
-                return {
-                    date: indexDateMap.get(index),
-                    type: item
-                }
-            });
-        this.participants.push({
-            ...participant,
-            readableDates: (dates as {date: string; type: Number}[])
-        })
-    }
+export interface DoodleReducedResult {
+    code: string;
+    title: string;
+    participants: DiscordParticipant[];
 }
 
 export class DoodleUtility {
@@ -36,9 +18,32 @@ export class DoodleUtility {
         return matches![1];
     }
 
+    public addParticipant(result: DoodleReducedResult, participant: DoodleParticipant, indexDateMap: Map<Number, string>) {
+        const dates = participant.preferences
+            .filter((value) => value !== DoodlePreferencesType.NO)
+            .map((item, index) => {
+                return {
+                    date: indexDateMap.get(index),
+                    type: item
+                }
+            });
+        result.participants.push({
+            ...participant,
+            readableDates: (dates as {date: string; type: Number}[])
+        })
+    }
+
+    public static getPollUrl(code: string) {
+        return 'https://doodle.com/poll/' + code;
+    }
+
     public extractVotes(code: string): Promise<DoodleReducedResult> {
         return new Promise<DoodleReducedResult>(async (resolve, reject) => {
-            const reducedResult = new DoodleReducedResult(code);
+            const reducedResult: DoodleReducedResult = {
+                code: code,
+                title: '',
+                participants: []
+            };
             axios.get('https://doodle.com/api/v2.0/polls/' + code)
                 .then((result) => {
                     if (result.status !== 200) {
@@ -51,8 +56,9 @@ export class DoodleUtility {
                     }
 
                     for (const participant of data.participants) {
-                        reducedResult.addParticipant(participant, indexDateMap);
+                        this.addParticipant(reducedResult, participant, indexDateMap);
                     }
+                    reducedResult.title = data.title;
                     resolve(reducedResult);
                 }).catch(reject);
         });
