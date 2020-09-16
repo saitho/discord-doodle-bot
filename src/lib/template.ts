@@ -3,16 +3,19 @@ import {template} from "lodash";
 import {DoodlePreferencesType} from "./doodle_event";
 import {DateConditions} from "./conditions/date";
 import {ResultsConditions} from "./conditions/results";
+import {UserConditions} from "./conditions/user";
+import {CommandoClient} from "discord.js-commando";
 
 export class Template {
     protected result: DoodleReducedResult;
 
-    public static parse(result: DoodleReducedResult, condition: string) {
+    public static parse(result: DoodleReducedResult, condition: string, client: CommandoClient) {
         const poll = new this(result)
         return template(condition)({
             poll: poll,
             date: new DateConditions(),
-            results: new ResultsConditions(poll)
+            results: new ResultsConditions(poll),
+            u: new UserConditions(client)
         })
     }
 

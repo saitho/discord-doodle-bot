@@ -33,7 +33,7 @@ module.exports = class InfoCommand extends Command {
         for (const pollCode of polls) {
             const poll = await pollStorage.update(pollCode)
             for(const trigger of triggers.filter((item) => item.code === pollCode)) {
-                const result = await this.runTrigger(trigger, poll)
+                const result = await this.runTrigger(trigger, poll, msg.client)
                 if (result === null) {
                     console.log('Trigger errored:')
                     console.log(trigger)
@@ -65,15 +65,15 @@ module.exports = class InfoCommand extends Command {
         return msg.channel.sendEmbed(embed)
     }
 
-    protected async runTrigger(trigger: Trigger, poll: DoodleReducedResult): Promise<boolean> {
+    protected async runTrigger(trigger: Trigger, poll: DoodleReducedResult, client: CommandoClient): Promise<boolean> {
         return new Promise<boolean>((resolve, reject) => {
-            const condition = Template.parse(poll, trigger.condition)
+            const condition = Template.parse(poll, trigger.condition, client)
             if (!condition) {
                 resolve(false)
             }
 
             const channel = this.client.channels.get(trigger.channelId) as TextChannel
-            channel.send(trigger.message)
+            channel.send(Template.parse(poll, trigger.message, client))
                 .then(() => resolve(true))
                 .catch(reject);
         });
