@@ -35,20 +35,25 @@ module.exports = class InfoCommand extends Command {
             for(const trigger of triggers.filter((item) => item.code === pollCode)) {
                 const result = await this.runTrigger(trigger, poll)
                 if (result === null) {
-                    console.log('Trigger errored: ' + trigger.toString())
+                    console.log('Trigger errored:')
+                    console.log(trigger)
                     stats.errored++
                     continue
                 } else if (!result) {
-                    console.log('Trigger skipped: ' + trigger.toString())
+                    console.log('Trigger skipped:')
+                    console.log(trigger)
                     stats.skipped++
                     continue
                 }
-                console.log('Trigger executed: ' + trigger.toString())
                 stats.completed++
                 if (trigger.removeAfterExecution) {
-                    console.log('Trigger removed: ' + trigger.toString())
+                    console.log('Trigger executed and removed:')
+                    console.log(trigger)
                     stats.removed++
                     await triggerStorage.remove(trigger)
+                } else {
+                    console.log('Trigger executed and not removed:')
+                    console.log(trigger)
                 }
             }
         }
