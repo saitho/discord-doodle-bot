@@ -1,9 +1,9 @@
 import {DiscordParticipant, DoodleReducedResult} from "../utility/doodle";
 import {template} from "lodash";
 import {DoodlePreferencesType} from "./doodle_event";
-import {DateConditions} from "./conditions/date";
-import {ResultsConditions} from "./conditions/results";
-import {UserConditions} from "./conditions/user";
+import {Calendar} from "./functions/calendar";
+import {Results} from "./functions/results";
+import {User} from "./functions/user";
 import {CommandoClient} from "discord.js-commando";
 
 export class Template {
@@ -13,9 +13,9 @@ export class Template {
         const poll = new this(result)
         return template(condition)({
             poll: poll,
-            date: new DateConditions(),
-            results: new ResultsConditions(poll),
-            u: new UserConditions(client)
+            date: new Calendar(),
+            results: new Results(poll),
+            u: new User(client)
         })
     }
 

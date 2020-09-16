@@ -1,4 +1,4 @@
-export class DateConditions {
+export class Calendar {
     get today(): string {
         return new Date().toISOString().split('T')[0]
     }

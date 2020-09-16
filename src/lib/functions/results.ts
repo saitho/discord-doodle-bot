@@ -1,6 +1,6 @@
 import {Template} from "../template";
 
-export class ResultsConditions {
+export class Results {
     protected poll: Template
 
     constructor(poll: Template) {

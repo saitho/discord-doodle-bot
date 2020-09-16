@@ -1,6 +1,6 @@
 import {CommandoClient} from "discord.js-commando";
 
-export class UserConditions {
+export class User {
     protected client: CommandoClient
 
     constructor(client: CommandoClient) {
