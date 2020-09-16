@@ -1,11 +1,10 @@
 import {CommandoClient, Command, CommandMessage} from "discord.js-commando";
-import {template} from "lodash";
 import {Trigger} from "../../lib/trigger";
 import {PollStorage} from "../../lib/storage/polls";
 import {TriggerStorage} from "../../lib/storage/triggers";
 import {DoodleReducedResult} from "../../utility/doodle";
 import {Conditional} from "../../lib/conditional";
-import {cpus} from "os";
+import {TextChannel} from "discord.js";
 
 module.exports = class InfoCommand extends Command {
     constructor(bot: CommandoClient) {
@@ -36,8 +35,11 @@ module.exports = class InfoCommand extends Command {
 
     protected async runTrigger(trigger: Trigger, poll: DoodleReducedResult) {
         const condition = Conditional.evaluateCondition(poll, trigger.condition)
-        console.log(condition)
+        if (!condition) {
+            return
+        }
 
-        const channel = await this.client.channels.get(trigger.channelId);
+        const channel = await this.client.channels.get(trigger.channelId) as TextChannel
+        await channel.send(trigger.message)
     }
 }
