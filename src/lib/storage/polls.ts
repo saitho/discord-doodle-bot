@@ -1,7 +1,8 @@
 import {DoodleReducedResult} from "../../utility/doodle";
 import axios from "axios";
-import {DoodleEvent, DoodleParticipant, DoodlePreferencesType} from "../doodle_event";
 import {ObjectStorage} from "./object_storage";
+import DoodleEvent from "../doodle/event";
+import DoodleParticipant from "../doodle/participant";
 
 export class PollStorage extends ObjectStorage<DoodleReducedResult, string> {
     idStorageName = 'polls'
@@ -34,7 +35,7 @@ export class PollStorage extends ObjectStorage<DoodleReducedResult, string> {
         });
     }
 
-    public addParticipant(result: DoodleReducedResult, participant: DoodleParticipant, indexDateMap: Map<Number, string>) {
+    public addParticipant = (result: DoodleReducedResult, participant: DoodleParticipant, indexDateMap: Map<Number, string>) => {
         const dates = participant.preferences
             .map((item, index) => {
                 return {
@@ -46,6 +47,6 @@ export class PollStorage extends ObjectStorage<DoodleReducedResult, string> {
             ...participant,
             readableDates: (dates as {date: string; type: Number}[])
         })
-    }
+    };
 
 }

@@ -1,4 +1,4 @@
-import {DoodleParticipant} from "../lib/doodle_event";
+import DoodleParticipant from "../lib/doodle/participant";
 
 export interface DiscordParticipant extends DoodleParticipant {
     readableDates: {date: string; type: Number}[];

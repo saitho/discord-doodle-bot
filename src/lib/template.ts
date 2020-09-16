@@ -1,10 +1,10 @@
 import {DiscordParticipant, DoodleReducedResult} from "../utility/doodle";
 import {template} from "lodash";
-import {DoodlePreferencesType} from "./doodle_event";
 import {Calendar} from "./functions/calendar";
 import {Results} from "./functions/results";
 import {User} from "./functions/user";
 import {CommandoClient} from "discord.js-commando";
+import {DoodlePreferencesType} from "./doodle/preferences_type";
 
 export class Template {
     protected result: DoodleReducedResult;

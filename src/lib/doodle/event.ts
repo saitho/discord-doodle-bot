@@ -1,39 +1,8 @@
-export enum DoodlePreferencesType {
-    NO = 0,
-    YESNOIFNEEDBE = 1,
-    YES = 2
-}
+import DoodleOption from "./option";
+import DoodleComment from "./comment";
+import DoodleParticipant from "./participant";
 
-export enum DoodleState {
-    OPEN = 1
-}
-
-export interface DoodleOption {
-    "start": Number;
-    "end": Number;
-    "id":  string;
-    "startDateTime": Number;
-    "endDateTime": Number;
-    "available": Boolean;
-}
-
-export interface DoodleComment {
-    "id": Number,
-    "author": string,
-    "timestamp": Number,
-    "text": string
-}
-
-export interface DoodleParticipant {
-    "id": Number;
-    "name": string;
-    "preferences": Number[];
-    "smallAvatarUrl": string;
-    "largeAvatarUrl": string;
-    "userId": string;
-}
-
-export interface DoodleEvent {
+export default interface DoodleEvent {
     id: string;
     latestChange: Number;
     initiated: Number;
