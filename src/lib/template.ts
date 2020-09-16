@@ -11,11 +11,18 @@ export class Template {
 
     public static parse(result: DoodleReducedResult, condition: string, client: CommandoClient) {
         const poll = new this(result)
+        const calendarFunc = new Calendar()
+        const resultsFunc = new Results(poll)
+        const usersFunc = new User(client)
         return template(condition)({
             poll: poll,
-            date: new Calendar(),
-            results: new Results(poll),
-            u: new User(client)
+            p: poll,
+            date: calendarFunc,
+            d: calendarFunc,
+            results: resultsFunc,
+            r: resultsFunc,
+            user: usersFunc,
+            u: usersFunc
         })
     }
 
