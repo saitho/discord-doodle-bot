@@ -30,10 +30,15 @@ module.exports = class InfoCommand extends Command {
                     type: 'string'
                 },
                 {
-                    key: 'channel',
-                    prompt: 'channel where to post the message. if no channel given it will be sent to the channel that set the trigger.',
-                    type: 'string',
-                    default: ''
+                    key: 'url',
+                    prompt: 'Webhook URL to post to',
+                    type: 'string'
+                },
+                {
+                    key: 'removeAfterExecution',
+                    prompt: 'Remove trigger after successful execution (enabled per default)',
+                    type: 'boolean',
+                    default: true
                 },
             ],
         });
@@ -46,17 +51,13 @@ module.exports = class InfoCommand extends Command {
             return msg.channel.send("Code not found. Make sure to add it via `doodle-add` command.");
         }
 
-        let channel = msg.channel;
-        if (args.channel instanceof TextChannel) {
-            channel = args.channel;
-        }
-
         const storage = new TriggerStorage(this.client.provider, msg.guild)
         await storage.set({
             code: code,
             condition: args.condition,
             message: args.message,
-            channelId: channel.id
+            url: args.url,
+            removeAfterExecution: args.removeAfterExecution
         })
 
         return msg.channel.send(`set trigger for code ${code}`)

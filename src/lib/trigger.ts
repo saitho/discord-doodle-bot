@@ -2,5 +2,6 @@ export interface Trigger {
     code: string;
     condition: string;
     message: string;
-    channelId: string;
+    url: string;
+    removeAfterExecution: boolean;
 }

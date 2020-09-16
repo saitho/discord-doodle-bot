@@ -17,6 +17,9 @@ module.exports = class InfoCommand extends Command {
         const triggerStorage = new TriggerStorage(this.client.provider, msg.guild)
         const triggers = await triggerStorage.get()
         let triggerEmbed = new RichEmbed();
+        if (!triggers.length) {
+            triggerEmbed.setDescription('No triggers configured. You can add one with `trigger-set`.')
+        }
         for (const i in triggers) {
             if (Number(i) > 0) {
                 await msg.channel.sendEmbed(triggerEmbed)
@@ -27,7 +30,8 @@ module.exports = class InfoCommand extends Command {
                 .addField('Poll', `[${trigger.code}](${DoodleUtility.getPollUrl(trigger.code)})`)
                 .addField('Condition', `\`${trigger.condition}\``)
                 .addField('Message', trigger.message)
-                .addField('Receiver', `<#${trigger.channelId}>`)
+                .addField('Webhook-URL', trigger.url)
+                .addField('Remove after execution?', trigger.removeAfterExecution)
         }
         return msg.channel.sendEmbed(triggerEmbed)
     }

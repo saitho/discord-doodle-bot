@@ -4,7 +4,8 @@ import {PollStorage} from "../../lib/storage/polls";
 import {TriggerStorage} from "../../lib/storage/triggers";
 import {DoodleReducedResult} from "../../utility/doodle";
 import {Conditional} from "../../lib/conditional";
-import {TextChannel} from "discord.js";
+import axios from "axios";
+import {RichEmbed} from "discord.js";
 
 module.exports = class InfoCommand extends Command {
     constructor(bot: CommandoClient) {
@@ -24,22 +25,53 @@ module.exports = class InfoCommand extends Command {
         const triggers = await triggerStorage.get()
         const polls = new Set(triggers.map((item) => item.code))
 
+        const stats = {
+            completed: 0,
+            skipped: 0,
+            removed: 0,
+            errored: 0
+        }
         for (const pollCode of polls) {
             const poll = await pollStorage.update(pollCode)
             for(const trigger of triggers.filter((item) => item.code === pollCode)) {
-                await this.runTrigger(trigger, poll)
+                const result = await this.runTrigger(trigger, poll)
+                if (result === null) {
+                    console.log('Trigger errored: ' + trigger.toString())
+                    stats.errored++
+                    continue
+                } else if (!result) {
+                    console.log('Trigger skipped: ' + trigger.toString())
+                    stats.skipped++
+                    continue
+                }
+                console.log('Trigger executed: ' + trigger.toString())
+                stats.completed++
+                if (trigger.removeAfterExecution) {
+                    console.log('Trigger removed: ' + trigger.toString())
+                    stats.removed++
+                    await triggerStorage.remove(trigger)
+                }
             }
         }
-        return msg.channel.send(`boop`)
+        const embed = new RichEmbed()
+        embed.setTitle('Trigger status')
+            .addField('Completed:', `${stats.completed} (${stats.removed} removed)`)
+            .addField('Skipped:', stats.skipped)
+            .addField('Errored:', stats.errored)
+        return msg.channel.sendEmbed(embed)
     }
 
-    protected async runTrigger(trigger: Trigger, poll: DoodleReducedResult) {
-        const condition = Conditional.evaluateCondition(poll, trigger.condition)
-        if (!condition) {
-            return
-        }
+    protected async runTrigger(trigger: Trigger, poll: DoodleReducedResult): Promise<boolean> {
+        return new Promise<boolean>((resolve, reject) => {
+            const condition = Conditional.evaluateCondition(poll, trigger.condition)
+            if (!condition) {
+                resolve(false)
+            }
 
-        const channel = await this.client.channels.get(trigger.channelId) as TextChannel
-        await channel.send(trigger.message)
+            axios
+                .post(trigger.url, {content: trigger.message})
+                .then(() => resolve(true))
+                .catch(reject);
+        });
     }
 }
