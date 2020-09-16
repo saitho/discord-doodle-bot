@@ -13,7 +13,8 @@ var bot: CommandoClient = new CommandoClient({
 bot.registry
     .registerGroups([
         ["bot", "Meta"],
-        ["doodle", "Doodle"]
+        ["doodle", "Doodle"],
+        ["trigger", "Trigger"]
     ])
     .registerDefaults()
     .registerCommandsIn(path.join(__dirname, 'commands'))

@@ -1,10 +1,11 @@
 import { CommandoClient, Command, CommandMessage } from "discord.js-commando";
 import {DoodleUtility} from "../../utility/doodle";
+import {PollStorage} from "../../lib/storage/polls";
 
 module.exports = class InfoCommand extends Command {
     constructor(bot: CommandoClient) {
         super(bot, {
-            name: 'remove',
+            name: 'doodle-remove',
             group: 'doodle',
             memberName: 'remove',
             description: 'Remove a Doodle link',
@@ -23,15 +24,9 @@ module.exports = class InfoCommand extends Command {
 
     async run(msg: CommandMessage, args) {
         const code = DoodleUtility.extractDoodleCode(args.url)
-
-        let polls: string[] = await this.client.provider.get(msg.guild, "polls") ?? []
-        const pollPos = polls.indexOf(code)
-        if (pollPos === -1) {
+        if (!await new PollStorage(this.client.provider, msg.guild).remove(code)) {
             return msg.channel.send("Poll not in list.")
         }
-
-        await this.client.provider.set(msg.guild, "polls", polls.filter((item) => item !== code))
-        await this.client.provider.remove(msg.guild, "poll_" + code)
         return msg.channel.send("Removed poll from list.")
     }
 }

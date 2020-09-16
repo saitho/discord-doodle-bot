@@ -5,7 +5,7 @@ import {DoodleReducedResult, DoodleUtility} from "../../utility/doodle";
 module.exports = class InfoCommand extends Command {
     constructor(bot: CommandoClient) {
         super(bot, {
-            name: 'list',
+            name: 'doodle-list',
             group: 'doodle',
             memberName: 'list',
             description: 'List all Doodle links',
@@ -17,7 +17,7 @@ module.exports = class InfoCommand extends Command {
         const formattedPolls: any[] = [];
         for (const pollId of polls) {
             const pollDetails = (await this.client.provider.get(msg.guild, "poll_" + pollId)) as DoodleReducedResult
-            formattedPolls.push(`- [${pollDetails.title}](${DoodleUtility.getPollUrl(pollDetails.code)})`);
+            formattedPolls.push(`- [${pollDetails.title}](${DoodleUtility.getPollUrl(pollDetails.code)}) [${pollDetails.code}]`);
         }
         const embed = new RichEmbed();
         embed.setTitle(`**${formattedPolls.length}** polls saved`)

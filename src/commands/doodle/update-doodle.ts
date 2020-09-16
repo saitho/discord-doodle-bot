@@ -1,10 +1,11 @@
 import {CommandoClient, Command, CommandMessage} from "discord.js-commando";
 import {DoodleUtility} from "../../utility/doodle";
+import {PollStorage} from "../../lib/storage/polls";
 
 module.exports = class InfoCommand extends Command {
     constructor(bot: CommandoClient) {
         super(bot, {
-            name: 'update',
+            name: 'doodle-update',
             group: 'doodle',
             memberName: 'update',
             description: 'Update an existing Doodle link\'s data',
@@ -23,12 +24,9 @@ module.exports = class InfoCommand extends Command {
 
     async run(msg: CommandMessage, args) {
         const code = DoodleUtility.extractDoodleCode(args.url)
-
-        const polls: string[] = await this.client.provider.get(msg.guild, "polls") ?? []
-        if (polls.indexOf(code) === -1) {
+        if (!await new PollStorage(this.client.provider, msg.guild).update(code)) {
             return msg.channel.send("Poll already not in list.");
         }
-        await this.client.provider.set(msg.guild, "poll_" + code, await new DoodleUtility().extractVotes(code))
         return msg.channel.send("Updated poll in list.")
     }
 }
