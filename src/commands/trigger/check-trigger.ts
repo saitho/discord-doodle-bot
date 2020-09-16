@@ -3,7 +3,7 @@ import {Trigger} from "../../lib/trigger";
 import {PollStorage} from "../../lib/storage/polls";
 import {TriggerStorage} from "../../lib/storage/triggers";
 import {DoodleReducedResult} from "../../utility/doodle";
-import {Conditional} from "../../lib/conditional";
+import {Template} from "../../lib/template";
 import axios from "axios";
 import {RichEmbed} from "discord.js";
 
@@ -63,13 +63,13 @@ module.exports = class InfoCommand extends Command {
 
     protected async runTrigger(trigger: Trigger, poll: DoodleReducedResult): Promise<boolean> {
         return new Promise<boolean>((resolve, reject) => {
-            const condition = Conditional.evaluateCondition(poll, trigger.condition)
+            const condition = Template.parse(poll, trigger.condition)
             if (!condition) {
                 resolve(false)
             }
 
             axios
-                .post(trigger.url, {content: trigger.message})
+                .post(trigger.url, {content: Template.parse(poll, trigger.message)})
                 .then(() => resolve(true))
                 .catch(reject);
         });

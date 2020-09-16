@@ -1,9 +1,9 @@
-import {Conditional} from "../conditional";
+import {Template} from "../template";
 
 export class ResultsConditions {
-    protected poll: Conditional
+    protected poll: Template
 
-    constructor(poll: Conditional) {
+    constructor(poll: Template) {
         this.poll = poll
     }
 

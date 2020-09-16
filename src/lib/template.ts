@@ -4,10 +4,10 @@ import {DoodlePreferencesType} from "./doodle_event";
 import {DateConditions} from "./conditions/date";
 import {ResultsConditions} from "./conditions/results";
 
-export class Conditional {
+export class Template {
     protected result: DoodleReducedResult;
 
-    public static evaluateCondition(result: DoodleReducedResult, condition: string) {
+    public static parse(result: DoodleReducedResult, condition: string) {
         const poll = new this(result)
         return template(condition)({
             poll: poll,
