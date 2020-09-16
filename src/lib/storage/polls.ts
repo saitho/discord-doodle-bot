@@ -36,7 +36,6 @@ export class PollStorage extends ObjectStorage<DoodleReducedResult, string> {
 
     public addParticipant(result: DoodleReducedResult, participant: DoodleParticipant, indexDateMap: Map<Number, string>) {
         const dates = participant.preferences
-            .filter((value) => value !== DoodlePreferencesType.NO)
             .map((item, index) => {
                 return {
                     date: indexDateMap.get(index),
