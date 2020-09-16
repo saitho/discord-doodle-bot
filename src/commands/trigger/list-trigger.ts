@@ -30,7 +30,7 @@ module.exports = class InfoCommand extends Command {
                 .addField('Poll', `[${trigger.code}](${DoodleUtility.getPollUrl(trigger.code)})`)
                 .addField('Condition', `\`${trigger.condition}\``)
                 .addField('Message', trigger.message)
-                .addField('Webhook-URL', trigger.url)
+                .addField('Receiver', `<#${trigger.channelId}>`)
                 .addField('Remove after execution?', trigger.removeAfterExecution)
         }
         return msg.channel.sendEmbed(triggerEmbed)

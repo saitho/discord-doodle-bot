@@ -3,9 +3,8 @@ import {Trigger} from "../../lib/trigger";
 import {PollStorage} from "../../lib/storage/polls";
 import {TriggerStorage} from "../../lib/storage/triggers";
 import {DoodleReducedResult} from "../../utility/doodle";
+import {RichEmbed, TextChannel} from "discord.js";
 import {Template} from "../../lib/template";
-import axios from "axios";
-import {RichEmbed} from "discord.js";
 
 module.exports = class InfoCommand extends Command {
     constructor(bot: CommandoClient) {
@@ -68,8 +67,8 @@ module.exports = class InfoCommand extends Command {
                 resolve(false)
             }
 
-            axios
-                .post(trigger.url, {content: Template.parse(poll, trigger.message)})
+            const channel = this.client.channels.get(trigger.channelId) as TextChannel
+            channel.send(trigger.message)
                 .then(() => resolve(true))
                 .catch(reject);
         });
