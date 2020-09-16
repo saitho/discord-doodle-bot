@@ -9,6 +9,15 @@ export class TriggerStorage extends KeyValueStorage<Trigger> {
         await this.add(trigger)
     }
 
+    public async remove(id: Trigger): Promise<boolean> {
+        const polls: Trigger[] = await this.get();
+        if (polls.indexOf(id) !== -1) {
+            return false;
+        }
+        await this.provider.set(this.guild, this.idStorageName, polls.filter((item) => item.code !== id.code))
+        return true;
+    }
+
     protected async mapIdToObject(id: string) {
         return new Promise<Trigger>(async (resolve, reject) => {
             // id

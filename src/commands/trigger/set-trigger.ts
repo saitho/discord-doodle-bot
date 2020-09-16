@@ -10,6 +10,9 @@ module.exports = class InfoCommand extends Command {
             memberName: 'set',
             description: 'set a new Doodle trigger',
             guildOnly: true,
+            examples: [
+                'Send message to #dev channel if more than 1 person said yes for date 2020-09-15:\n`trigger-set c46457x3iyz5ue6w "${poll.results.get(\'2020-09-15\').yes > 1" "${poll.results.get(\'2020-09-15\').yes} people are available" #dev`'
+            ],
             args: [
                 {
                     key: 'code',

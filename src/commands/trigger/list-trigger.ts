@@ -16,16 +16,19 @@ module.exports = class InfoCommand extends Command {
     async run(msg: CommandMessage, _) {
         const triggerStorage = new TriggerStorage(this.client.provider, msg.guild)
         const triggers = await triggerStorage.get()
-        const embeds: RichEmbed[] = []
-        for (const trigger of triggers) {
-            const triggerEmbed = new RichEmbed();
+        let triggerEmbed = new RichEmbed();
+        for (const i in triggers) {
+            if (Number(i) > 0) {
+                await msg.channel.sendEmbed(triggerEmbed)
+                triggerEmbed = new RichEmbed()
+            }
+            const trigger = triggers[i]
             triggerEmbed
                 .addField('Poll', `[${trigger.code}](${DoodleUtility.getPollUrl(trigger.code)})`)
                 .addField('Condition', `\`${trigger.condition}\``)
                 .addField('Message', trigger.message)
                 .addField('Receiver', `<#${trigger.channelId}>`)
-            embeds.push(triggerEmbed)
         }
-        return msg.channel.send(...embeds)
+        return msg.channel.sendEmbed(triggerEmbed)
     }
 }
