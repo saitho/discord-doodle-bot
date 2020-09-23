@@ -8,9 +8,6 @@ import {DoodlePreferencesType} from "./doodle/preferences_type";
 
 export interface PollResult {
     date: string;
-    yes: number;
-    no: number;
-    maybe: number;
     yesUser: string[];
     noUser: string[];
     maybeUser: string[];
@@ -50,9 +47,6 @@ export class Template {
                 if (!result) {
                     result = {
                         date: d.date,
-                        yes: 0,
-                        no: 0,
-                        maybe: 0,
                         yesUser: [],
                         noUser: [],
                         maybeUser: []
@@ -60,15 +54,12 @@ export class Template {
                 }
                 switch (d.type) {
                     case DoodlePreferencesType.NO:
-                        result.no++
                         result.noUser.push(p.name)
                         break
                     case DoodlePreferencesType.YES:
-                        result.yes++
                         result.yesUser.push(p.name)
                         break;
                     case DoodlePreferencesType.YESNOIFNEEDBE:
-                        result.maybe++
                         result.maybeUser.push(p.name)
                         break;
                 }
