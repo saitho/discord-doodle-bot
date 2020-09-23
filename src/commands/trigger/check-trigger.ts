@@ -62,7 +62,7 @@ module.exports = class InfoCommand extends Command {
             .addField('Completed:', `${stats.completed} (${stats.removed} removed)`)
             .addField('Skipped:', stats.skipped)
             .addField('Errored:', stats.errored)
-        return msg.channel.sendEmbed(embed)
+        return msg.channel.send(embed)
     }
 
     protected async runTrigger(trigger: Trigger, poll: DoodleReducedResult, client: CommandoClient): Promise<boolean> {

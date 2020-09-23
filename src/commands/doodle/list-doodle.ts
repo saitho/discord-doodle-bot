@@ -24,6 +24,6 @@ module.exports = class InfoCommand extends Command {
         const embed = new RichEmbed();
         embed.setTitle(`**${formattedPolls.length}** polls saved`)
             .setDescription(formattedPolls.join("\n"))
-        return msg.channel.sendEmbed(embed)
+        return msg.channel.send(embed)
     }
 }

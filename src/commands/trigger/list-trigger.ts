@@ -22,7 +22,7 @@ module.exports = class InfoCommand extends Command {
         }
         for (const i in triggers) {
             if (Number(i) > 0) {
-                await msg.channel.sendEmbed(triggerEmbed)
+                await msg.channel.send(triggerEmbed)
                 triggerEmbed = new RichEmbed()
             }
             const trigger = triggers[i]
@@ -33,6 +33,6 @@ module.exports = class InfoCommand extends Command {
                 .addField('Receiver', `<#${trigger.channelId}>`)
                 .addField('Remove after execution?', trigger.removeAfterExecution)
         }
-        return msg.channel.sendEmbed(triggerEmbed)
+        return msg.channel.send(triggerEmbed)
     }
 }
