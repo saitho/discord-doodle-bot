@@ -26,6 +26,13 @@ sqlite.open(path.join(__dirname, 'database.sqlite3')).then(async (database) => {
 })
 
 bot.on("ready", async () => {
+    await bot.user.setPresence({
+        game: {
+            name: "They like it bot",
+            type: "WATCHING"
+        }
+    })
+    await bot.user.setStatus("idle")
     console.log(`${bot.user.username} is online!`);
 })
 
