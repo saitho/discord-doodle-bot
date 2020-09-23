@@ -6,6 +6,16 @@ import {User} from "./functions/user";
 import {CommandoClient} from "discord.js-commando";
 import {DoodlePreferencesType} from "./doodle/preferences_type";
 
+export interface PollResult {
+    date: string;
+    yes: number;
+    no: number;
+    maybe: number;
+    yesUser: string[];
+    noUser: string[];
+    maybeUser: string[];
+}
+
 export class Template {
     protected result: DoodleReducedResult;
 
@@ -32,7 +42,7 @@ export class Template {
     }
 
     public get results() {
-        const results = new Map<string, { date: string; yes: number; no: number; maybe: number }>()
+        const results = new Map<string, PollResult>()
 
         for (const p of this.result.participants) {
             for (const d of p.readableDates) {
@@ -42,18 +52,24 @@ export class Template {
                         date: d.date,
                         yes: 0,
                         no: 0,
-                        maybe: 0
+                        maybe: 0,
+                        yesUser: [],
+                        noUser: [],
+                        maybeUser: []
                     }
                 }
                 switch (d.type) {
                     case DoodlePreferencesType.NO:
                         result.no++
+                        result.noUser.push(p.name)
                         break
                     case DoodlePreferencesType.YES:
                         result.yes++
+                        result.yesUser.push(p.name)
                         break;
                     case DoodlePreferencesType.YESNOIFNEEDBE:
                         result.maybe++
+                        result.maybeUser.push(p.name)
                         break;
                 }
                 results.set(d.date, result)
