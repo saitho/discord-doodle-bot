@@ -67,8 +67,8 @@ module.exports = class InfoCommand extends Command {
 
     protected async runTrigger(trigger: Trigger, poll: DoodleReducedResult, client: CommandoClient): Promise<boolean> {
         return new Promise<boolean>((resolve, reject) => {
-            const condition = Template.parse(poll, trigger.condition, client)
-            if (!condition) {
+            const condition = Template.parse(poll, "${" + trigger.condition + "}", client)
+            if (condition !== "true") {
                 resolve(false)
             }
 
