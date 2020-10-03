@@ -21,7 +21,6 @@ module.exports = class InfoCommand extends Command {
                 if (resultMsg.type !== 'run') {
                     return;
                 }
-                client.off('message', triggerResultListener)
                 const stats = resultMsg.data as RunResponse
 
                 const embed = new RichEmbed()
@@ -36,7 +35,7 @@ module.exports = class InfoCommand extends Command {
                 console.error('Unable to get Trigger executor for guild!')
                 return;
             }
-            executor.on('message', triggerResultListener);
+            executor.once('message', triggerResultListener);
             executor.send({
                 type: 'run'
             });

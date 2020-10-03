@@ -33,15 +33,16 @@ async function runTrigger(trigger: Trigger, poll: DoodleReducedResult, client: C
 
 async function run(): Promise<RunResponse> {
     return new Promise<RunResponse>((resolve, reject) => {
-        const bot = new CommandoClient()
-        bot.init()
+        const client = new CommandoClient()
+        client.on("debug", console.log)
+        client.init()
             .catch((e) => reject(e))
 
-        bot.on("ready", async () => {
-            const guild = bot.guilds.find(((value, key) => key === argv.guildId))
+        client.once("ready", async () => {
+            const guild = client.guilds.find(((value, key) => key === argv.guildId))
 
-            const pollStorage = new PollStorage(bot.provider, guild)
-            const triggerStorage = new TriggerStorage(bot.provider, guild)
+            const pollStorage = new PollStorage(client.provider, guild)
+            const triggerStorage = new TriggerStorage(client.provider, guild)
 
             const triggers = await triggerStorage.get()
             const polls = new Set(triggers.map((item) => item.code))
@@ -55,7 +56,7 @@ async function run(): Promise<RunResponse> {
             for (const pollCode of polls) {
                 const poll = await pollStorage.update(pollCode)
                 for(const trigger of triggers.filter((item) => item.code === pollCode)) {
-                    const result = await runTrigger(trigger, poll, bot)
+                    const result = await runTrigger(trigger, poll, client)
                     if (result === null) {
                         console.log('Trigger errored:')
                         console.log(trigger)
@@ -79,10 +80,9 @@ async function run(): Promise<RunResponse> {
                     }
                 }
             }
-            await bot.destroy()
             resolve(stats)
         })
-        bot.login(token).catch(console.log)
+        client.login(token).catch(console.log)
     })
 }
 
