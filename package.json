@@ -4,7 +4,7 @@
   "scripts": {
     "debug": "nodemon -e js,ts --watch src --exec \"npm run build:ts && npm run start:app\"",
     "build:ts": "tsc",
-    "start:app": "node dist/index.js"
+    "start:app": "node dist/src/index.js"
   },
   "author": "abyssal512",
   "license": "MIT",
@@ -13,11 +13,15 @@
     "discord.js": "^11.6.4",
     "discord.js-commando": "^0.10.0",
     "lodash": "^4.17.20",
-    "sqlite": "^3.0.6"
+    "sqlite": "^3.0.6",
+    "yargs": "^16.0.3"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.161",
     "@types/node": "^12.12.58",
-    "nodemon": "^2.0.4"
+    "@types/yargs": "^15.0.7",
+    "nodemon": "^2.0.4",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.3"
   }
 }

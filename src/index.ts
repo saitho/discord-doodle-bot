@@ -1,15 +1,14 @@
-import {CommandoClient, SQLiteProvider} from "discord.js-commando";
-const { token, prefix, supportServerInvite } = require("../config.json");
+import { token, prefix, supportServerInvite } from "../config.json";
 import path from "path";
-import sqlite from 'sqlite';
+import {CommandoClient} from "./lib/commandoclient";
 
-const bot: CommandoClient = new CommandoClient({
+const botConfig = {
     commandPrefix: prefix,
     commandEditableDuration: 10,
     nonCommandEditable: true,
     invite: supportServerInvite
-})
-
+}
+const bot: CommandoClient = new CommandoClient(botConfig)
 bot.registry
     .registerGroups([
         ["bot", "Meta"],
@@ -19,13 +18,15 @@ bot.registry
     .registerDefaults()
     .registerCommandsIn(path.join(__dirname, 'commands'))
 
-sqlite.open(path.join(__dirname, 'database.sqlite3')).then(async (database) => {
-    await bot.setProvider(new SQLiteProvider(database));
-}).catch((e) => {
-    console.error(`Failed to connect to database: ${e}`)
-})
+bot.init()
+    .catch(console.error)
 
 bot.on("ready", async () => {
+    // start sub processes
+    bot.guilds.forEach((g) => {
+        bot.launchTriggerExecutor(g)
+    });
+
     await bot.user.setPresence({
         game: {
             name: "They like it bot",
