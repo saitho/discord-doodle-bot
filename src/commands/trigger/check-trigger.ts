@@ -15,12 +15,14 @@ module.exports = class InfoCommand extends Command {
     }
 
     async run(msg: CommandMessage, args): Promise<Message> {
+        msg.channel.startTyping()
         const stats = await TriggerExecutor.execute(this.client, msg.guild.id)
         const embed = new RichEmbed()
         embed.setTitle('Trigger status')
             .addField('Completed:', `${stats.completed} (${stats.removed} removed)`)
             .addField('Skipped:', stats.skipped)
             .addField('Errored:', stats.errored)
+        msg.channel.stopTyping()
         return msg.channel.send(embed);
     }
 }

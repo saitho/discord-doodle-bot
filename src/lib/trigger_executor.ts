@@ -7,29 +7,39 @@ import {TextChannel} from "discord.js";
 
 export interface RunResponse {completed: number; skipped: number, removed: number, errored: number}
 
+enum TriggerStatus {
+    SUCCESS = 1,
+    SKIPPED = 2,
+    REMOVED = 3
+}
+
 export class TriggerExecutor {
     public static executeSingle(client: CommandoClient, trigger: Trigger) {
-        return new Promise<boolean>(async (resolve, reject) => {
-            const status = await this.runTrigger(trigger, client)
-            if (status === null) {
-                console.log('Trigger errored:')
-                console.log(trigger)
-                reject()
-            } else if (!status) {
-                console.log('Trigger skipped:')
-                console.log(trigger)
-            } else if (status) {
-                if (trigger.removeAfterExecution) {
-                    await this.getTriggerStorage(client, trigger.guildId).remove(trigger)
-                    console.log('Trigger executed and removed:')
-                } else {
-                    console.log('Trigger executed and not removed:')
-                }
-                console.log(trigger)
-            }
-
-
-            resolve(status)
+        return new Promise<TriggerStatus>((resolve, reject) => {
+            this.runTrigger(trigger, client)
+                .then(async (status) => {
+                    switch (status) {
+                        case TriggerStatus.SKIPPED:
+                            console.log('Trigger skipped:')
+                            console.log(trigger)
+                            break;
+                        default:
+                            if (trigger.removeAfterExecution) {
+                                await this.getTriggerStorage(client, trigger.guildId).remove(trigger)
+                                console.log('Trigger executed and removed:')
+                                status = TriggerStatus.REMOVED
+                            } else {
+                                console.log('Trigger executed and not removed:')
+                            }
+                            console.log(trigger)
+                            break;
+                    }
+                    resolve(status)
+                }).catch((e) => {
+                    console.log('Trigger errored:')
+                    console.log(trigger)
+                    reject(e)
+                });
         })
     }
 
@@ -43,45 +53,61 @@ export class TriggerExecutor {
         return new PollStorage(client.provider, guild)
     }
 
-    public static async execute(client: CommandoClient, guildId: string): Promise<RunResponse> {
-        const triggers = await this.getTriggerStorage(client, guildId).get()
-
-        const stats: RunResponse = {
-            completed: 0,
-            skipped: 0,
-            removed: 0,
-            errored: 0
-        }
-        for (const trigger of triggers) {
-            const result = await this.executeSingle(client, trigger)
-            if (result === null) {
-                stats.errored++
-                continue
-            } else if (!result) {
-                stats.skipped++
-                continue
+    public static execute(client: CommandoClient, guildId: string) {
+        return new Promise<RunResponse>(async (resolve, reject) => {
+            const triggers = await this.getTriggerStorage(client, guildId).get()
+            const promises: Promise<TriggerStatus>[] = []
+            for (const trigger of triggers) {
+                promises.push(this.executeSingle(client, trigger))
             }
-            stats.completed++
-            if (trigger.removeAfterExecution) {
-                stats.removed++
-            }
-        }
 
-        return stats;
+            Promise.all(promises)
+                .then((results) => {
+                    const stats: RunResponse = {
+                        completed: 0,
+                        skipped: 0,
+                        removed: 0,
+                        errored: 0
+                    }
+                    for (const result of results) {
+                        if (!result) {
+                            stats.errored++
+                            continue
+                        }
+                        switch (result) {
+                            case TriggerStatus.SKIPPED:
+                                stats.skipped++;
+                                break;
+                            default:
+                                stats.completed++
+                                if (result === TriggerStatus.REMOVED) {
+                                    stats.removed++
+                                }
+                                break;
+                        }
+                    }
+                    resolve(stats)
+                })
+                .then((e) => reject(e))
+        });
     }
 
-    protected static async runTrigger(trigger: Trigger, client: CommandoClient): Promise<boolean> {
+    protected static async runTrigger(trigger: Trigger, client: CommandoClient): Promise<TriggerStatus> {
         const poll = await this.getPollStorage(client, trigger.guildId).update(trigger.code)
 
-        return new Promise<boolean>((resolve, reject) => {
+        return new Promise<TriggerStatus>((resolve, reject) => {
             const conditionParsed = Template.parse(poll, trigger.condition, client)
             if (conditionParsed !== "true") {
-                resolve(false)
+                resolve(TriggerStatus.SKIPPED)
             }
 
             const channel = client.channels.get(trigger.channelId) as TextChannel
-            channel.send(Template.parse(poll, trigger.message, client))
-                .then(() => resolve(true))
+            const message = Template.parse(poll, trigger.message, client)
+            if (!message.length) {
+               reject(`Message is empty.`)
+            }
+            channel.send(message)
+                .then(() => resolve(TriggerStatus.SUCCESS))
                 .catch(reject);
         });
     }
