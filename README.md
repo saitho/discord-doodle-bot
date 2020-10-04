@@ -8,7 +8,7 @@ This is mainly a personal bot. I do not guarantee it works and it probably won't
 Rename the `config.json.dist` to `config.json` and set your own bot token.
 
 You can find a Docker image here: https://hub.docker.com/repository/docker/saitho/discord-doodle-bot
-Make sure to mount the config.json at `/app/dist/config.json` and the SQLite database at `/app/dist/src/database.sqlite3`.
+Make sure to mount the config.json at `/app/config.json` and the SQLite database at `/app/dist/database.sqlite3`.
 
 ---
 

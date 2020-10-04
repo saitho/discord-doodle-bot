@@ -6,7 +6,6 @@
         "allowSyntheticDefaultImports": true,
         "strictNullChecks": true,
         "esModuleInterop": true,
-        "resolveJsonModule": true,
         "outDir": "dist"
     },
     "include": [

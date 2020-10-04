@@ -4,7 +4,7 @@
   "scripts": {
     "debug": "nodemon -e js,ts --watch src --exec \"npm run build && npm run start\"",
     "build": "tsc",
-    "start": "node dist/src/index.js"
+    "start": "node dist/index.js"
   },
   "author": "abyssal512",
   "license": "MIT",
