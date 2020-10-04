@@ -99,12 +99,14 @@ export class TriggerExecutor {
             const conditionParsed = Template.parse(poll, trigger.condition, client)
             if (conditionParsed !== "true") {
                 resolve(TriggerStatus.SKIPPED)
+                return;
             }
 
             const channel = client.channels.get(trigger.channelId) as TextChannel
             const message = Template.parse(poll, trigger.message, client)
             if (!message.length) {
                reject(`Message is empty.`)
+                return;
             }
             channel.send(message)
                 .then(() => resolve(TriggerStatus.SUCCESS))
