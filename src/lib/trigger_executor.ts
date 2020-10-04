@@ -12,12 +12,22 @@ export class TriggerExecutor {
         return new Promise<boolean>(async (resolve, reject) => {
             const status = await this.runTrigger(trigger, client)
             if (status === null) {
+                console.log('Trigger errored:')
+                console.log(trigger)
                 reject()
+            } else if (!status) {
+                console.log('Trigger skipped:')
+                console.log(trigger)
+            } else if (status) {
+                if (trigger.removeAfterExecution) {
+                    await this.getTriggerStorage(client, trigger.guildId).remove(trigger)
+                    console.log('Trigger executed and removed:')
+                } else {
+                    console.log('Trigger executed and not removed:')
+                }
+                console.log(trigger)
             }
 
-            if (status && trigger.removeAfterExecution) {
-                await this.getTriggerStorage(client, trigger.guildId).remove(trigger)
-            }
 
             resolve(status)
         })
@@ -45,24 +55,15 @@ export class TriggerExecutor {
         for (const trigger of triggers) {
             const result = await this.executeSingle(client, trigger)
             if (result === null) {
-                console.log('Trigger errored:')
-                console.log(trigger)
                 stats.errored++
                 continue
             } else if (!result) {
-                console.log('Trigger skipped:')
-                console.log(trigger)
                 stats.skipped++
                 continue
             }
             stats.completed++
             if (trigger.removeAfterExecution) {
-                console.log('Trigger executed and removed:')
-                console.log(trigger)
                 stats.removed++
-            } else {
-                console.log('Trigger executed and not removed:')
-                console.log(trigger)
             }
         }
 
