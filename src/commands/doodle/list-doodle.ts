@@ -1,7 +1,8 @@
-import {CommandoClient, Command, CommandMessage} from "discord.js-commando";
+import {CommandoClient, CommandMessage} from "discord.js-commando";
 import {RichEmbed} from "discord.js";
 import {DoodleReducedResult, DoodleUtility} from "../../utility/doodle";
 import {PollStorage} from "../../lib/storage/polls";
+import {Command} from "../../lib/command";
 
 module.exports = class InfoCommand extends Command {
     constructor(bot: CommandoClient) {
@@ -13,7 +14,7 @@ module.exports = class InfoCommand extends Command {
         });
     }
 
-    async run(msg: CommandMessage, _) {
+    async runInternal(msg: CommandMessage, _) {
         const pollStorage = new PollStorage(this.client.provider, msg.guild);
         const polls = await pollStorage.get()
         const formattedPolls: any[] = [];
@@ -24,6 +25,6 @@ module.exports = class InfoCommand extends Command {
         const embed = new RichEmbed();
         embed.setTitle(`**${formattedPolls.length}** polls saved`)
             .setDescription(formattedPolls.join("\n"))
-        return msg.channel.send(embed)
+        return embed
     }
 }

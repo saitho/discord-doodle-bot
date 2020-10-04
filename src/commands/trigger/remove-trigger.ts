@@ -1,6 +1,7 @@
-import {CommandoClient, Command, CommandMessage} from "discord.js-commando";
+import {CommandoClient, CommandMessage} from "discord.js-commando";
 import {TriggerStorage} from "../../lib/storage/triggers";
 import {Scheduler} from "../../lib/scheduler";
+import {Command} from "../../lib/command";
 
 module.exports = class RemoveTrigger extends Command {
     constructor(bot: CommandoClient) {
@@ -20,12 +21,12 @@ module.exports = class RemoveTrigger extends Command {
         });
     }
 
-    async run(msg: CommandMessage, args) {
+    async runInternal(msg: CommandMessage, args) {
         const storage = new TriggerStorage(this.client.provider, msg.guild)
         Scheduler.getInstance().unschedule(args.triggerId)
         if (await storage.removeById(args.triggerId)) {
-            return msg.channel.send(`removed trigger with id ${args.triggerId}`)
+            return `removed trigger with id ${args.triggerId}`
         }
-        return msg.channel.send(`unable to remove trigger with id ${args.triggerId}`)
+        return `unable to remove trigger with id ${args.triggerId}`
     }
 }

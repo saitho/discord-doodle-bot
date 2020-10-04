@@ -1,9 +1,10 @@
-import {Command, CommandMessage} from "discord.js-commando";
+import {CommandMessage} from "discord.js-commando";
 import {Message, RichEmbed} from "discord.js";
 import {CommandoClient} from "../../lib/commandoclient";
 import {TriggerExecutor} from "../../lib/trigger_executor";
+import {Command} from "../../lib/command";
 
-module.exports = class InfoCommand extends Command {
+module.exports = class CheckCommand extends Command {
     constructor(bot: CommandoClient) {
         super(bot, {
             name: 'trigger-check',
@@ -14,15 +15,13 @@ module.exports = class InfoCommand extends Command {
         });
     }
 
-    async run(msg: CommandMessage, args): Promise<Message> {
-        msg.channel.startTyping()
+    async runInternal(msg: CommandMessage, args): Promise<Message|RichEmbed> {
+        const message = new RichEmbed()
         const stats = await TriggerExecutor.execute(this.client, msg.guild.id)
-        const embed = new RichEmbed()
-        embed.setTitle('Trigger status')
+        message.setTitle('Trigger status')
             .addField('Completed:', `${stats.completed} (${stats.removed} removed)`)
             .addField('Skipped:', stats.skipped)
             .addField('Errored:', stats.errored)
-        msg.channel.stopTyping()
-        return msg.channel.send(embed);
+        return message
     }
 }

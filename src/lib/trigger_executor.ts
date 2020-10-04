@@ -36,7 +36,7 @@ export class TriggerExecutor {
                     }
                     resolve(status)
                 }).catch((e) => {
-                    console.log('Trigger errored:')
+                    console.log(`Trigger errored ("${e}"):`)
                     console.log(trigger)
                     reject(e)
                 });
@@ -88,7 +88,7 @@ export class TriggerExecutor {
                     }
                     resolve(stats)
                 })
-                .then((e) => reject(e))
+                .catch((e) => reject(e))
         });
     }
 

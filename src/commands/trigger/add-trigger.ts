@@ -1,8 +1,9 @@
-import {CommandoClient, Command, CommandMessage} from "discord.js-commando";
+import {CommandoClient, CommandMessage} from "discord.js-commando";
 import {TextChannel} from "discord.js";
 import {TriggerStorage} from "../../lib/storage/triggers";
 import * as cron from "node-cron"
 import {Scheduler} from "../../lib/scheduler";
+import {Command} from "../../lib/command";
 
 module.exports = class AddTrigger extends Command {
     constructor(bot: CommandoClient) {
@@ -52,15 +53,15 @@ module.exports = class AddTrigger extends Command {
         });
     }
 
-    async run(msg: CommandMessage, args) {
+    async runInternal(msg: CommandMessage, args) {
         if (!cron.validate(args.time)) {
-            return msg.channel.send(`Invalid time format.`)
+            return `Invalid time format.`
         }
 
         const code = args.code
         const polls: string[] = await this.client.provider.get(msg.guild, "polls") ?? []
         if (polls.indexOf(code) === -1) {
-            return msg.channel.send("Code not found. Make sure to add it via `doodle-add` command.");
+            return `Code not found. Make sure to add it via \`doodle-add\` command.`;
         }
 
         let channel = msg.channel;
@@ -82,6 +83,6 @@ module.exports = class AddTrigger extends Command {
         await storage.add(trigger)
         Scheduler.getInstance().schedule(this.client, trigger)
 
-        return msg.channel.send(`set trigger for code ${trigger.code} (ID: ${trigger.id}`)
+        return `set trigger for code ${trigger.code} (ID: ${trigger.id}`
     }
 }

@@ -1,6 +1,7 @@
-import {CommandoClient, Command, CommandMessage} from "discord.js-commando";
+import {CommandoClient, CommandMessage} from "discord.js-commando";
 import {DoodleUtility} from "../../utility/doodle";
 import {PollStorage} from "../../lib/storage/polls";
+import {Command} from "../../lib/command";
 
 module.exports = class InfoCommand extends Command {
     constructor(bot: CommandoClient) {
@@ -22,11 +23,11 @@ module.exports = class InfoCommand extends Command {
         });
     }
 
-    async run(msg: CommandMessage, args) {
+    async runInternal(msg: CommandMessage, args) {
         const code = DoodleUtility.extractDoodleCode(args.url)
         if (!await new PollStorage(this.client.provider, msg.guild).add(code)) {
-            return msg.channel.send("Poll already in list.");
+            return `Poll already in list.`;
         }
-        return msg.channel.send("Added poll to list.")
+        return `Added poll to list.`
     }
 }

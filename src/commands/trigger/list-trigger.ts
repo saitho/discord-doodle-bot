@@ -1,7 +1,8 @@
-import {CommandoClient, Command, CommandMessage} from "discord.js-commando";
+import {CommandoClient, CommandMessage} from "discord.js-commando";
 import {RichEmbed} from "discord.js";
 import {DoodleUtility} from "../../utility/doodle";
 import {TriggerStorage} from "../../lib/storage/triggers";
+import {Command} from "../../lib/command";
 
 module.exports = class InfoCommand extends Command {
     constructor(bot: CommandoClient) {
@@ -13,7 +14,7 @@ module.exports = class InfoCommand extends Command {
         });
     }
 
-    async run(msg: CommandMessage, _) {
+    async runInternal(msg: CommandMessage, _) {
         const triggerStorage = new TriggerStorage(this.client.provider, msg.guild)
         const triggers = await triggerStorage.get()
         let triggerEmbed = new RichEmbed();
@@ -35,6 +36,6 @@ module.exports = class InfoCommand extends Command {
                 .addField('Remove after execution?', trigger.removeAfterExecution)
                 .setFooter(`Trigger-ID: ${trigger.id}`)
         }
-        return msg.channel.send(triggerEmbed)
+        return triggerEmbed
     }
 }

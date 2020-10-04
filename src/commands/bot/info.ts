@@ -1,4 +1,5 @@
-import { CommandoClient, Command, CommandMessage } from "discord.js-commando";
+import { CommandoClient, CommandMessage } from "discord.js-commando";
+import {Command} from "../../lib/command";
 
 module.exports = class InfoCommand extends Command {
     constructor(bot: CommandoClient) {
@@ -11,7 +12,7 @@ module.exports = class InfoCommand extends Command {
         });
     }
 
-    async run(msg: CommandMessage, args) {
-        return msg.channel.send("We're live!")
+    async runInternal(msg: CommandMessage, args) {
+        return `We're live!`
     }
 }
