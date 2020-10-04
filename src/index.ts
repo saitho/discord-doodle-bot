@@ -1,8 +1,10 @@
-import { token, prefix, supportServerInvite } from "../config.json";
 import path from "path";
 import {CommandoClient} from "./lib/commandoclient";
 import {Scheduler} from "./lib/scheduler";
 import {TriggerStorage} from "./lib/storage/triggers";
+
+// Do not use "import" syntax so this file is not needed during build!
+const { token, prefix, supportServerInvite } = require('../config.json')
 
 const botConfig = {
     commandPrefix: prefix,
