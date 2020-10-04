@@ -1,4 +1,4 @@
-import {Command as DiscordCommand, CommandInfo, CommandMessage, CommandoClient} from "discord.js-commando";
+import {Command as DiscordCommand, CommandMessage} from "discord.js-commando";
 import {Message, RichEmbed} from "discord.js";
 
 export abstract class Command extends DiscordCommand {
@@ -8,7 +8,9 @@ export abstract class Command extends DiscordCommand {
         msg.channel.startTyping()
         try {
             const message = await this.runInternal(msg, args)
-            return msg.channel.send(message);
+            const sendMessage = msg.channel.send(message);
+            msg.channel.stopTyping();
+            return sendMessage;
         } catch (error) {
             let message: RichEmbed = new RichEmbed()
             message.setColor("RED")
