@@ -8,6 +8,11 @@ export class TriggerStorage extends KeyValueStorage<Trigger> {
         return this.removeById(trigger.id)
     }
 
+    public async set(trigger: Trigger) {
+        await this.remove(trigger)
+        await this.add(trigger)
+    }
+
     public async removeByPollCode(pollCode: string): Promise<number> {
         const triggers: Trigger[] = await this.get();
 
@@ -29,7 +34,7 @@ export class TriggerStorage extends KeyValueStorage<Trigger> {
         return true;
     }
 
-    protected async mapIdToObject(triggerId: number) {
+    public async getById(triggerId) {
         return (await this.get()).find((trigger) => Number(trigger.id) === Number(triggerId))
     }
 }

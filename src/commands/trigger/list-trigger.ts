@@ -28,6 +28,7 @@ module.exports = class InfoCommand extends Command {
             }
             const trigger = triggers[i]
             triggerEmbed
+                .addField('Enabled?', `${trigger.enabled ? 'yes' : 'no'}`)
                 .addField('Poll', `[${trigger.code}](${DoodleUtility.getPollUrl(trigger.code)})`)
                 .addField('Condition', `\`${trigger.condition}\``)
                 .addField('Execution cron time', `\`${trigger.executionTime}\``)

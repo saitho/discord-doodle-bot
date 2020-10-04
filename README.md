@@ -86,6 +86,12 @@ Remove a trigger by ID. The ID is displayed after a trigger is created and in th
 
 Format: `.trigger-remove <trigger-id>`
 
+#### trigger-toggle
+
+Toggle a trigger (enable/disable). Disabled triggers are ignored in execution.
+
+Format: `.trigger-toggle <trigger-id>`
+
 ## Template functions
 
 In trigger condition and message you can use the following template functions.

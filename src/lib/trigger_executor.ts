@@ -5,12 +5,13 @@ import {CommandoClient} from "discord.js-commando";
 import {Template} from "./template";
 import {TextChannel} from "discord.js";
 
-export interface RunResponse {completed: number; skipped: number, removed: number, errored: number}
+export interface RunResponse {completed: number; skipped: number, removed: number, errored: number, disabled: number}
 
 enum TriggerStatus {
     SUCCESS = 1,
     SKIPPED = 2,
-    REMOVED = 3
+    REMOVED = 3,
+    DISABLED = 4
 }
 
 export class TriggerExecutor {
@@ -19,6 +20,10 @@ export class TriggerExecutor {
             this.runTrigger(trigger, client)
                 .then(async (status) => {
                     switch (status) {
+                        case TriggerStatus.DISABLED:
+                            console.log('Trigger disabled:')
+                            console.log(trigger)
+                            break;
                         case TriggerStatus.SKIPPED:
                             console.log('Trigger skipped:')
                             console.log(trigger)
@@ -67,7 +72,8 @@ export class TriggerExecutor {
                         completed: 0,
                         skipped: 0,
                         removed: 0,
-                        errored: 0
+                        errored: 0,
+                        disabled: 0
                     }
                     for (const result of results) {
                         if (!result) {
@@ -75,6 +81,9 @@ export class TriggerExecutor {
                             continue
                         }
                         switch (result) {
+                            case TriggerStatus.DISABLED:
+                                stats.disabled++;
+                                break;
                             case TriggerStatus.SKIPPED:
                                 stats.skipped++;
                                 break;
@@ -92,10 +101,14 @@ export class TriggerExecutor {
         });
     }
 
-    protected static async runTrigger(trigger: Trigger, client: CommandoClient): Promise<TriggerStatus> {
-        const poll = await this.getPollStorage(client, trigger.guildId).update(trigger.code)
+    protected static runTrigger(trigger: Trigger, client: CommandoClient): Promise<TriggerStatus> {
+        return new Promise<TriggerStatus>(async (resolve, reject) => {
+            if (!trigger.enabled) {
+                resolve(TriggerStatus.DISABLED)
+                return
+            }
+            const poll = await this.getPollStorage(client, trigger.guildId).update(trigger.code)
 
-        return new Promise<TriggerStatus>((resolve, reject) => {
             const conditionParsed = Template.parse(poll, trigger.condition, client)
             if (conditionParsed !== "true") {
                 resolve(TriggerStatus.SKIPPED)

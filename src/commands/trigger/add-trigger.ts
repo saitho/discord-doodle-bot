@@ -72,6 +72,7 @@ module.exports = class AddTrigger extends Command {
         const storage = new TriggerStorage(this.client.provider, msg.guild)
         const trigger = {
             id: Date.now(),
+            enabled: true,
             code: code,
             condition: args.condition,
             message: args.message,
