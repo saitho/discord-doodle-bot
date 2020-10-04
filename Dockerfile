@@ -6,11 +6,17 @@ RUN rm -rf dist
 RUN npm install
 RUN npm run build
 
+# Install production NPM packages separately
+FROM node:8-alpine AS npm-packages
+WORKDIR /app
+COPY package* ./
+RUN npm install --production
+
 # Our Second stage, that creates an image for production
 FROM node:8-alpine AS ts-sample-prod
 VOLUME /app
 WORKDIR /app
 COPY --from=ts-sample-builder ./app/dist ./dist
 COPY package* ./
-RUN npm install --production
+COPY --from=npm-packages ./app/node_modules ./node_modules
 CMD npm start
