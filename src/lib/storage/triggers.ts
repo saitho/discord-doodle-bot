@@ -4,23 +4,21 @@ import {KeyValueStorage} from "./keyvalue_storage";
 export class TriggerStorage extends KeyValueStorage<Trigger> {
     idStorageName = 'triggers'
 
-    public async set(trigger: Trigger) {
-        await this.remove(trigger)
-        await this.add(trigger)
+    public async remove(trigger: Trigger): Promise<boolean> {
+        return this.removeById(trigger.id)
     }
 
-    public async remove(id: Trigger): Promise<boolean> {
-        const polls: Trigger[] = await this.get();
-        if (polls.indexOf(id) !== -1) {
+    public async removeById(triggerId: number): Promise<boolean> {
+        const triggers: Trigger[] = await this.get();
+
+        if (triggers.findIndex((trigger) => trigger.id === triggerId) !== -1) {
             return false;
         }
-        await this.provider.set(this.guild, this.idStorageName, polls.filter((item) => item.code !== id.code))
+        await this.provider.set(this.guild, this.idStorageName, triggers.filter((item) => item.id !== triggerId))
         return true;
     }
 
-    protected async mapIdToObject(id: string) {
-        return new Promise<Trigger>(async (resolve, reject) => {
-            // id
-        });
+    protected async mapIdToObject(triggerId: number) {
+        return (await this.get()).find((trigger) => trigger.id === triggerId)
     }
 }

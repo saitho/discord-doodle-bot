@@ -4,16 +4,16 @@ import {TriggerStorage} from "../../lib/storage/triggers";
 import * as cron from "node-cron"
 import {Scheduler} from "../../lib/scheduler";
 
-module.exports = class InfoCommand extends Command {
+module.exports = class AddTrigger extends Command {
     constructor(bot: CommandoClient) {
         super(bot, {
-            name: 'trigger-set',
+            name: 'trigger-add',
             group: 'trigger',
-            memberName: 'set',
-            description: 'set a new Doodle trigger',
+            memberName: 'add',
+            description: 'Add a new Doodle trigger',
             guildOnly: true,
             examples: [
-                'Send message to #dev channel if more than 1 person said yes for date 2020-09-15:\n`trigger-set c46457x3iyz5ue6w "${poll.results.get(\'2020-09-15\').yes > 1" "${poll.results.get(\'2020-09-15\').yes} people are available" #dev`'
+                'Send message to #dev channel if more than 1 person said yes for date 2020-09-15:\n`trigger-add c46457x3iyz5ue6w "${poll.results.get(\'2020-09-15\').yes > 1" "${poll.results.get(\'2020-09-15\').yes} people are available" #dev`'
             ],
             args: [
                 {
@@ -70,6 +70,7 @@ module.exports = class InfoCommand extends Command {
 
         const storage = new TriggerStorage(this.client.provider, msg.guild)
         const trigger = {
+            id: Date.now(),
             code: code,
             condition: args.condition,
             message: args.message,
@@ -78,9 +79,9 @@ module.exports = class InfoCommand extends Command {
             guildId: msg.guild.id,
             executionTime: args.time
         };
-        await storage.set(trigger)
+        await storage.add(trigger)
         Scheduler.getInstance().schedule(this.client, trigger)
 
-        return msg.channel.send(`set trigger for code ${code}`)
+        return msg.channel.send(`set trigger for code ${trigger.code} (ID: ${trigger.id}`)
     }
 }

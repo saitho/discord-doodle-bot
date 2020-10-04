@@ -47,11 +47,11 @@ List all Triggers
 
 Format: `.trigger-list`
 
-#### trigger-set
+#### trigger-add
 
-Set a new Doodle trigger
+Add a new Doodle trigger
 
-Format: `.trigger-set <code> <condition> <message> [channel] [removeAfterExecution]`
+Format: `.trigger-add <code> <condition> <message> [channel] [removeAfterExecution]`
 
 Arguments:
 - code (string) = The Doodle code from URL
@@ -65,13 +65,19 @@ Examples:
 
 Send message to #dev channel if more than 1 person said yes for date 2020-09-15. Checks every minute:
 ```
-trigger-set c46457x3iyz5ue6w "${poll.results.get('2020-09-15').yes > 1" "${poll.results.get('2020-09-15').yes} people are available" "* * * * *" #dev
+.trigger-add c46457x3iyz5ue6w "${poll.results.get('2020-09-15').yes > 1" "${poll.results.get('2020-09-15').yes} people are available" "* * * * *" #dev
 ```
 
 Send message to #dev channel if more than 3 people might be available tomorrow. Checks every day at 00:00am:
 ```
-trigger-set c46457x3iyz5ue6w "${r.yes(d.tomorrow) + r.maybe(d.tomorrow) > 3" "${r.yes(d.tomorrow)} people are available tomorrow and ${r.maybe(d.tomorrow)} may be" "0 0 0 * * *" #dev
+.trigger-add c46457x3iyz5ue6w "${r.yes(d.tomorrow) + r.maybe(d.tomorrow) > 3" "${r.yes(d.tomorrow)} people are available tomorrow and ${r.maybe(d.tomorrow)} may be" "0 0 0 * * *" #dev
 ```
+
+#### trigger-remove
+
+Remove a trigger by ID. The ID is displayed after a trigger is created and in the trigger list.
+
+Format: `.trigger-remove <trigger-id>`
 
 ## Template functions
 

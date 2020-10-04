@@ -18,7 +18,7 @@ module.exports = class InfoCommand extends Command {
         const triggers = await triggerStorage.get()
         let triggerEmbed = new RichEmbed();
         if (!triggers.length) {
-            triggerEmbed.setDescription('No triggers configured. You can add one with `trigger-set`.')
+            triggerEmbed.setDescription('No triggers configured. You can add one with `trigger-add`.')
         }
         for (const i in triggers) {
             if (Number(i) > 0) {
@@ -33,6 +33,7 @@ module.exports = class InfoCommand extends Command {
                 .addField('Message', trigger.message)
                 .addField('Receiver', `<#${trigger.channelId}>`)
                 .addField('Remove after execution?', trigger.removeAfterExecution)
+                .setFooter(`Trigger-ID: ${trigger.id}`)
         }
         return msg.channel.send(triggerEmbed)
     }

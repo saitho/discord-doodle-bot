@@ -1,4 +1,5 @@
 export interface Trigger {
+    id: number;
     code: string;
     guildId: string;
     condition: string;

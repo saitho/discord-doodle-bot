@@ -15,6 +15,16 @@ export class Scheduler {
         return Scheduler.instance;
     }
 
+    public unschedule(triggerId: string) {
+        for (const trigger of this.tasks.keys()) {
+            if (trigger.id !== parseInt(triggerId)) {
+                continue;
+            }
+            this.tasks.get(trigger).destroy();
+            this.tasks.delete(trigger)
+        }
+    }
+
     public schedule(client: CommandoClient, trigger: Trigger) {
         const oldTask = this.tasks.get(trigger)
         if (oldTask) {
