@@ -14,11 +14,11 @@ export default interface DoodleEvent {
     "state": string; //DoodleState,
     "locale": string;
     "title": string;
-    "location":{
+    "location": {
         "name": string;
         "category": string; //"ONLINE";
     },
-    "initiator":{
+    "initiator": {
         "name": string;
         "notify": boolean;
         "avatarLargeUrl": string;

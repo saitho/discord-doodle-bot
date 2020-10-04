@@ -1,6 +1,8 @@
 import { token, prefix, supportServerInvite } from "../config.json";
 import path from "path";
 import {CommandoClient} from "./lib/commandoclient";
+import {Scheduler} from "./lib/scheduler";
+import {TriggerStorage} from "./lib/storage/triggers";
 
 const botConfig = {
     commandPrefix: prefix,
@@ -23,9 +25,14 @@ bot.init()
 
 bot.on("ready", async () => {
     // start sub processes
-    bot.guilds.forEach((g) => {
-        bot.launchTriggerExecutor(g)
-    });
+    for (const g of bot.guilds.values()) {
+        // Schedule tasks from database
+        const triggerStorage = new TriggerStorage(bot.provider, g)
+        const triggers = await triggerStorage.get()
+        for (const trigger of triggers) {
+            Scheduler.getInstance().schedule(bot, trigger)
+        }
+    }
 
     await bot.user.setPresence({
         game: {

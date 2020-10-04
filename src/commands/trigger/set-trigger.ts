@@ -1,6 +1,8 @@
 import {CommandoClient, Command, CommandMessage} from "discord.js-commando";
 import {TextChannel} from "discord.js";
 import {TriggerStorage} from "../../lib/storage/triggers";
+import * as cron from "node-cron"
+import {Scheduler} from "../../lib/scheduler";
 
 module.exports = class InfoCommand extends Command {
     constructor(bot: CommandoClient) {
@@ -30,6 +32,11 @@ module.exports = class InfoCommand extends Command {
                     type: 'string'
                 },
                 {
+                    key: 'time',
+                    prompt: 'When to check if trigger succeeded (crontab format)',
+                    type: 'string'
+                },
+                {
                     key: 'channel',
                     prompt: 'channel where to post the message. if no channel given it will be sent to the channel that set the trigger.',
                     type: 'string',
@@ -46,6 +53,10 @@ module.exports = class InfoCommand extends Command {
     }
 
     async run(msg: CommandMessage, args) {
+        if (!cron.validate(args.time)) {
+            return msg.channel.send(`Invalid time format.`)
+        }
+
         const code = args.code
         const polls: string[] = await this.client.provider.get(msg.guild, "polls") ?? []
         if (polls.indexOf(code) === -1) {
@@ -58,13 +69,17 @@ module.exports = class InfoCommand extends Command {
         }
 
         const storage = new TriggerStorage(this.client.provider, msg.guild)
-        await storage.set({
+        const trigger = {
             code: code,
             condition: args.condition,
             message: args.message,
             channelId: channel.id,
-            removeAfterExecution: args.removeAfterExecution
-        })
+            removeAfterExecution: args.removeAfterExecution,
+            guildId: msg.guild.id,
+            executionTime: args.time
+        };
+        await storage.set(trigger)
+        Scheduler.getInstance().schedule(this.client, trigger)
 
         return msg.channel.send(`set trigger for code ${code}`)
     }

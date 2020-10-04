@@ -29,6 +29,7 @@ module.exports = class InfoCommand extends Command {
             triggerEmbed
                 .addField('Poll', `[${trigger.code}](${DoodleUtility.getPollUrl(trigger.code)})`)
                 .addField('Condition', `\`${trigger.condition}\``)
+                .addField('Execution cron time', `\`${trigger.executionTime}\``)
                 .addField('Message', trigger.message)
                 .addField('Receiver', `<#${trigger.channelId}>`)
                 .addField('Remove after execution?', trigger.removeAfterExecution)

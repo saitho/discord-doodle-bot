@@ -13,15 +13,13 @@
     "discord.js": "^11.6.4",
     "discord.js-commando": "^0.10.0",
     "lodash": "^4.17.20",
-    "sqlite": "^3.0.6",
-    "yargs": "^16.0.3"
+    "node-cron": "^2.0.3",
+    "sqlite": "^3.0.6"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.161",
     "@types/node": "^12.12.58",
-    "@types/yargs": "^15.0.7",
     "nodemon": "^2.0.4",
-    "ts-node": "^9.0.0",
     "typescript": "^4.0.3"
   }
 }
