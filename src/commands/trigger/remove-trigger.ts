@@ -23,7 +23,9 @@ module.exports = class RemoveTrigger extends Command {
     async run(msg: CommandMessage, args) {
         const storage = new TriggerStorage(this.client.provider, msg.guild)
         Scheduler.getInstance().unschedule(args.triggerId)
-        await storage.removeById(args.triggerId)
-        return msg.channel.send(`remove trigger with id ${args.triggerId}`)
+        if (await storage.removeById(args.triggerId)) {
+            return msg.channel.send(`removed trigger with id ${args.triggerId}`)
+        }
+        return msg.channel.send(`unable to remove trigger with id ${args.triggerId}`)
     }
 }

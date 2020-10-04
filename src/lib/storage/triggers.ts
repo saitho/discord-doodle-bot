@@ -8,17 +8,28 @@ export class TriggerStorage extends KeyValueStorage<Trigger> {
         return this.removeById(trigger.id)
     }
 
+    public async removeByPollCode(pollCode: string): Promise<number> {
+        const triggers: Trigger[] = await this.get();
+
+        if (triggers.findIndex((trigger) => trigger.code === pollCode) === -1) {
+            return 0;
+        }
+        const filteredTriggers = triggers.filter((i) => i.code !== pollCode)
+        await this.provider.set(this.guild, this.idStorageName, triggers.filter((i) => i.code !== pollCode))
+        return triggers.length - filteredTriggers.length;
+    }
+
     public async removeById(triggerId: number): Promise<boolean> {
         const triggers: Trigger[] = await this.get();
 
-        if (triggers.findIndex((trigger) => trigger.id === triggerId) !== -1) {
+        if (triggers.findIndex((trigger) => Number(trigger.id) === Number(triggerId)) === -1) {
             return false;
         }
-        await this.provider.set(this.guild, this.idStorageName, triggers.filter((item) => item.id !== triggerId))
+        await this.provider.set(this.guild, this.idStorageName, triggers.filter((i) => Number(i.id) !== Number(triggerId)))
         return true;
     }
 
     protected async mapIdToObject(triggerId: number) {
-        return (await this.get()).find((trigger) => trigger.id === triggerId)
+        return (await this.get()).find((trigger) => Number(trigger.id) === Number(triggerId))
     }
 }

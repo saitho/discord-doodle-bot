@@ -1,6 +1,7 @@
 import { CommandoClient, Command, CommandMessage } from "discord.js-commando";
 import {DoodleUtility} from "../../utility/doodle";
 import {PollStorage} from "../../lib/storage/polls";
+import {TriggerStorage} from "../../lib/storage/triggers";
 
 module.exports = class InfoCommand extends Command {
     constructor(bot: CommandoClient) {
@@ -27,6 +28,7 @@ module.exports = class InfoCommand extends Command {
         if (!await new PollStorage(this.client.provider, msg.guild).remove(code)) {
             return msg.channel.send("Poll not in list.")
         }
-        return msg.channel.send("Removed poll from list.")
+        const removedTriggers = await new TriggerStorage(this.client.provider, msg.guild).removeByPollCode(code)
+        return msg.channel.send(`Removed poll from list and ${removedTriggers} associated triggers.`)
     }
 }
