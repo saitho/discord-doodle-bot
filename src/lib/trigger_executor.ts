@@ -3,7 +3,8 @@ import {PollStorage} from "./storage/polls";
 import {TriggerStorage} from "./storage/triggers";
 import {CommandoClient} from "discord.js-commando";
 import {Template} from "./template";
-import {TextChannel} from "discord.js";
+import {TextChannel, User} from "discord.js";
+import {DiscordUtility} from "./discord";
 
 export interface RunResponse {completed: number; skipped: number, removed: number, errored: number, disabled: number}
 
@@ -115,10 +116,22 @@ export class TriggerExecutor {
                 return;
             }
 
-            const channel = client.channels.get(trigger.channelId) as TextChannel
             const message = Template.parse(poll, trigger.message, client)
+
             if (!message.length) {
                reject(`Message is empty.`)
+                return;
+            }
+            /** @var channel TextChannel|User **/
+            let channel;
+
+            const channelInfo = new DiscordUtility().extractChannelId(trigger.channelId)
+            if (channelInfo.channelType === "channel") {
+                channel = client.channels.get(channelInfo.channelId) as TextChannel
+            } else if (channelInfo.channelType === "user") {
+                channel = client.users.get(channelInfo.channelId) as User
+            } else {
+                reject(`Unable to resolve target channel for trigger ${trigger.id}.`)
                 return;
             }
             channel.send(message)

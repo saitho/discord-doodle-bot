@@ -1,5 +1,4 @@
 import {CommandoClient, CommandMessage} from "discord.js-commando";
-import {TextChannel} from "discord.js";
 import {TriggerStorage} from "../../lib/storage/triggers";
 import * as cron from "node-cron"
 import {Scheduler} from "../../lib/scheduler";
@@ -64,23 +63,24 @@ module.exports = class AddTrigger extends Command {
             return `Code not found. Make sure to add it via \`doodle-add\` command.`;
         }
 
-        let channel = msg.channel;
-        if (args.channel instanceof TextChannel) {
-            channel = args.channel;
+        let channelId = '<#' + msg.channel.id + '>';
+        if (typeof args.channel === 'string' && args.channel.length > 0) {
+            channelId = args.channel;
         }
 
-        const storage = new TriggerStorage(this.client.provider, msg.guild)
         const trigger = {
             id: Date.now(),
             enabled: true,
             code: code,
             condition: args.condition,
             message: args.message,
-            channelId: channel.id,
+            channelId: channelId,
             removeAfterExecution: args.removeAfterExecution,
             guildId: msg.guild.id,
             executionTime: args.time
         };
+
+        const storage = new TriggerStorage(this.client.provider, msg.guild)
         await storage.add(trigger)
         Scheduler.getInstance().schedule(this.client, trigger)
 

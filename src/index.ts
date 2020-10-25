@@ -28,9 +28,13 @@ bot.init()
 bot.on("ready", async () => {
     // start sub processes
     for (const g of bot.guilds.values()) {
-        // Schedule tasks from database
         const triggerStorage = new TriggerStorage(bot.provider, g)
+
+        // Run migrations
+        await triggerStorage.runMigrations()
+
         const triggers = await triggerStorage.get()
+        // Schedule tasks from database
         for (const trigger of triggers) {
             Scheduler.getInstance().schedule(bot, trigger)
         }

@@ -1,8 +1,25 @@
 import {Trigger} from "../trigger";
 import {KeyValueStorage} from "./keyvalue_storage";
+import {SettingProvider} from "discord.js-commando";
+import {Guild} from "discord.js";
 
 export class TriggerStorage extends KeyValueStorage<Trigger> {
     idStorageName = 'triggers'
+
+    constructor(provider: SettingProvider, guild: Guild) {
+        super(provider, guild);
+    }
+
+    public async runMigrations() {
+        // Change numeric channel IDs to Discord formatted ID with <#ID>
+        for (const trigger of await this.get()) {
+            if (trigger.channelId.indexOf('<') !== -1) {
+                continue
+            }
+            trigger.channelId = `<#${trigger.channelId}>`
+            await this.set(trigger)
+        }
+    }
 
     public async remove(trigger: Trigger): Promise<boolean> {
         return this.removeById(trigger.id)
