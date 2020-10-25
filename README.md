@@ -75,9 +75,9 @@ Send message to #dev channel if more than 1 person said yes for date 2020-09-15.
 .trigger-add c46457x3iyz5ue6w "${poll.results.get('2020-09-15').yes > 1" "${poll.results.get('2020-09-15').yes} people are available" "* * * * *" #dev
 ```
 
-Send message to #dev channel if more than 3 people might be available tomorrow. Checks every day at 00:00am:
+Send message to @foobar user if more than 3 people might be available tomorrow. Checks every day at 00:00am:
 ```
-.trigger-add c46457x3iyz5ue6w "${r.yes(d.tomorrow) + r.maybe(d.tomorrow) > 3" "${r.yes(d.tomorrow)} people are available tomorrow and ${r.maybe(d.tomorrow)} may be" "0 0 0 * * *" #dev
+.trigger-add c46457x3iyz5ue6w "${r.yes(d.tomorrow) + r.maybe(d.tomorrow) > 3" "${r.yes(d.tomorrow)} people are available tomorrow and ${r.maybe(d.tomorrow)} may be" "0 0 0 * * *" @foobar
 ```
 
 #### trigger-remove
@@ -102,9 +102,11 @@ You can use these to access certain information about the poll or participants t
 * `r.yes(date: string)`: number – Number of people that are available at given date
 * `r.no(date: string)`: number – Number of people that are unavailable at given date
 * `r.maybe(date: string)`: number – Number of people that may be available at given date
+* `r.undecided(date: string)`: number – Number of people that have not voted at given date yet (only works if dates are added after they have already voted)
 * `r.yesUser(date: string)`: string[] – List of participant names that are available at given date
 * `r.noUser(date: string)`: string[] – List of participant names that are unavailable at given date
 * `r.maybeUser(date: string)`: string[] – List of participant names that may be available at given date
+* `r.undecidedUser(date: string)`: string[] – List of participant names that have not voted yet (only works if dates are added after they have already voted)
 
 ### date / d
 

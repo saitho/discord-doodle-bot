@@ -11,6 +11,7 @@ export interface PollResult {
     yesUser: string[];
     noUser: string[];
     maybeUser: string[];
+    undecidedUser: string[];
 }
 
 export class Template {
@@ -49,10 +50,14 @@ export class Template {
                         date: d.date,
                         yesUser: [],
                         noUser: [],
-                        maybeUser: []
+                        maybeUser: [],
+                        undecidedUser: []
                     }
                 }
                 switch (d.type) {
+                    case null: // Undecided
+                        result.undecidedUser.push(p.name)
+                        break
                     case DoodlePreferencesType.NO:
                         result.noUser.push(p.name)
                         break
@@ -63,6 +68,7 @@ export class Template {
                         result.maybeUser.push(p.name)
                         break;
                 }
+                console.log(result)
                 results.set(d.date, result)
             }
         }

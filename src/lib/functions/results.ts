@@ -22,6 +22,11 @@ export class Results {
         return results ? results.maybeUser : []
     }
 
+    public undecidedUser(date: string): string[] {
+        const results = this.poll.results.get(date)
+        return results ? results.undecidedUser : []
+    }
+
     public yes(date: string): number {
         return this.yesUser(date).length
     }
@@ -32,5 +37,9 @@ export class Results {
 
     public maybe(date: string): number {
         return this.maybeUser(date).length
+    }
+
+    public undecided(date: string): number {
+        return this.undecidedUser(date).length
     }
 }
