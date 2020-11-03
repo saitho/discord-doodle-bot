@@ -5,6 +5,7 @@ import {Results} from "./functions/results";
 import {User} from "./functions/user";
 import {CommandoClient} from "discord.js-commando";
 import {DoodlePreferencesType} from "./doodle/preferences_type";
+import {Guild} from "discord.js";
 
 export interface PollResult {
     date: string;
@@ -17,11 +18,11 @@ export interface PollResult {
 export class Template {
     protected result: DoodleReducedResult;
 
-    public static parse(result: DoodleReducedResult, condition: string, client: CommandoClient) {
+    public static parse(result: DoodleReducedResult, condition: string, client: CommandoClient, guild: Guild) {
         const poll = new this(result)
         const calendarFunc = new Calendar()
         const resultsFunc = new Results(poll)
-        const usersFunc = new User(client)
+        const usersFunc = new User(client, guild.members)
         return template(condition)({
             poll: poll,
             p: poll,
@@ -68,7 +69,6 @@ export class Template {
                         result.maybeUser.push(p.name)
                         break;
                 }
-                console.log(result)
                 results.set(d.date, result)
             }
         }

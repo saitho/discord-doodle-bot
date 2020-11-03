@@ -108,15 +108,23 @@ export class TriggerExecutor {
                 resolve(TriggerStatus.DISABLED)
                 return
             }
+
+            // Fetch guild information
+            const guild = client.guilds.get(trigger.guildId)
+            if (!guild) {
+                reject(`Unable to find guild!`)
+                return;
+            }
+
             const poll = await this.getPollStorage(client, trigger.guildId).update(trigger.code)
 
-            const conditionParsed = Template.parse(poll, trigger.condition, client)
+            const conditionParsed = Template.parse(poll, trigger.condition, client, guild)
             if (conditionParsed !== "true") {
                 resolve(TriggerStatus.SKIPPED)
                 return;
             }
 
-            const message = Template.parse(poll, trigger.message, client)
+            const message = Template.parse(poll, trigger.message, client, guild)
 
             if (!message.length) {
                reject(`Message is empty.`)

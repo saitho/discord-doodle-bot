@@ -1,7 +1,6 @@
 import {CommandoClient as DiscordCommandoClient, SQLiteProvider} from "discord.js-commando";
 import path from "path";
 import sqlite from "sqlite";
-import {Scheduler} from "./scheduler";
 
 export class CommandoClient extends DiscordCommandoClient {
     init() {
