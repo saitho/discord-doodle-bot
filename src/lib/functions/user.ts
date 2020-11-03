@@ -1,17 +1,17 @@
 import {CommandoClient} from "discord.js-commando";
-import {GuildMember, Snowflake} from "discord.js";
+import {Guild} from "discord.js";
 
 export class User {
     protected client: CommandoClient
-    protected guildMembers: Map<Snowflake, GuildMember>
+    protected guild: Guild
 
-    constructor(client: CommandoClient, guildMembers: Map<Snowflake, GuildMember>) {
+    constructor(client: CommandoClient, guild: Guild) {
         this.client = client
-        this.guildMembers = guildMembers
+        this.guild = guild
     }
 
     public mention(userName: string) {
-        const user = this.guildMembers.get(userName)
+        const user = this.guild.members.find((user) => user.user.username === userName)
         if (!user) {
             return ``
         }

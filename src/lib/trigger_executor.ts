@@ -3,7 +3,7 @@ import {PollStorage} from "./storage/polls";
 import {TriggerStorage} from "./storage/triggers";
 import {CommandoClient} from "discord.js-commando";
 import {Template} from "./template";
-import {TextChannel, User} from "discord.js";
+import {Guild, TextChannel, User} from "discord.js";
 import {DiscordUtility} from "./discord";
 
 export interface RunResponse {completed: number; skipped: number, removed: number, errored: number, disabled: number}
@@ -124,6 +124,7 @@ export class TriggerExecutor {
                 return;
             }
 
+            await this.guildPrepareMentionedUsers(trigger.message, guild)
             const message = Template.parse(poll, trigger.message, client, guild)
 
             if (!message.length) {
@@ -146,5 +147,20 @@ export class TriggerExecutor {
                 .then(() => resolve(TriggerStatus.SUCCESS))
                 .catch(reject);
         });
+    }
+
+    protected static async guildPrepareMentionedUsers(message: string, guild: Guild) {
+        const regex = /\w+\.mention\(['"](.*?)['"]\)/g;
+        let m;
+
+        while ((m = regex.exec(message)) !== null) {
+            if (m.index === regex.lastIndex) {
+                regex.lastIndex++;
+            }
+
+            for (const match of m) {
+                await guild.fetchMembers(match, 1)
+            }
+        }
     }
 }

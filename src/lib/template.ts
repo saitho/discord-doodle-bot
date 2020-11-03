@@ -22,7 +22,8 @@ export class Template {
         const poll = new this(result)
         const calendarFunc = new Calendar()
         const resultsFunc = new Results(poll)
-        const usersFunc = new User(client, guild.members)
+        const usersFunc = new User(client, guild)
+
         return template(condition)({
             poll: poll,
             p: poll,
