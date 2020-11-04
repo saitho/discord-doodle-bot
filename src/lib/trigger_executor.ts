@@ -5,6 +5,7 @@ import {CommandoClient} from "discord.js-commando";
 import {Template} from "./template";
 import {Guild, TextChannel, User} from "discord.js";
 import {DiscordUtility} from "./discord";
+import { getLogger } from "log4js";
 
 export interface RunResponse {completed: number; skipped: number, removed: number, errored: number, disabled: number}
 
@@ -22,28 +23,24 @@ export class TriggerExecutor {
                 .then(async (status) => {
                     switch (status) {
                         case TriggerStatus.DISABLED:
-                            console.log('Trigger disabled:')
-                            console.log(trigger)
+                            getLogger().info('Trigger disabled:', trigger)
                             break;
                         case TriggerStatus.SKIPPED:
-                            console.log('Trigger skipped:')
-                            console.log(trigger)
+                            getLogger().info('Trigger skipped:', trigger)
                             break;
                         default:
                             if (trigger.removeAfterExecution) {
                                 await this.getTriggerStorage(client, trigger.guildId).remove(trigger)
-                                console.log('Trigger executed and removed:')
+                                getLogger().info('Trigger executed and removed:', trigger)
                                 status = TriggerStatus.REMOVED
                             } else {
-                                console.log('Trigger executed and not removed:')
+                                getLogger().info('Trigger executed and not removed:', trigger)
                             }
-                            console.log(trigger)
                             break;
                     }
                     resolve(status)
                 }).catch((e) => {
-                    console.log(`Trigger errored ("${e}"):`)
-                    console.log(trigger)
+                    getLogger().error(`Trigger errored ("${e}"):`, trigger)
                     reject(e)
                 });
         })

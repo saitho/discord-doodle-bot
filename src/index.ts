@@ -6,6 +6,29 @@ import {TriggerStorage} from "./lib/storage/triggers";
 // Do not use "import" syntax so this file is not needed during build!
 const { token, prefix, supportServerInvite } = require('../config.json')
 
+// setup logger
+import {configure, getLogger} from "log4js";
+
+configure({
+    appenders: {
+        app: {
+            type: "file",
+            filename: "log/app.log",
+            maxLogSize: 10485760,
+            numBackups: 3
+        },
+        errorFile: {
+            type: "file",
+            filename: "log/errors.log"
+        },
+        errors: {
+            type: "logLevelFilter",
+            level: "ERROR",
+            appender: "errorFile"
+        }},
+    categories: { default: { appenders: ["app", "errors"], level: "INFO" } }
+})
+
 const botConfig = {
     commandPrefix: prefix,
     commandEditableDuration: 10,
@@ -23,7 +46,7 @@ bot.registry
     .registerCommandsIn(path.join(__dirname, 'commands'))
 
 bot.init()
-    .catch(console.error)
+    .catch(getLogger().error)
 
 bot.on("ready", async () => {
     // start sub processes
@@ -47,7 +70,7 @@ bot.on("ready", async () => {
         }
     })
     await bot.user.setStatus("idle")
-    console.log(`${bot.user.username} is online!`);
+    getLogger().info(`${bot.user.username} is online!`);
 })
 
-bot.login(token).catch(console.log);
+bot.login(token).catch(getLogger().error);

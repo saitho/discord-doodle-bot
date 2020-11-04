@@ -13,6 +13,7 @@
     "discord.js": "^11.6.4",
     "discord.js-commando": "^0.10.0",
     "lodash": "^4.17.20",
+    "log4js": "^6.3.0",
     "node-cron": "^2.0.3",
     "sqlite": "^3.0.6"
   },

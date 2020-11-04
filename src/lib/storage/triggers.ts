@@ -2,6 +2,7 @@ import {Trigger} from "../trigger";
 import {KeyValueStorage} from "./keyvalue_storage";
 import {SettingProvider} from "discord.js-commando";
 import {Guild} from "discord.js";
+import {getLogger} from "log4js";
 
 export class TriggerStorage extends KeyValueStorage<Trigger> {
     idStorageName = 'triggers'
@@ -16,6 +17,7 @@ export class TriggerStorage extends KeyValueStorage<Trigger> {
             if (trigger.channelId.indexOf('<') !== -1) {
                 continue
             }
+            getLogger().info(`Ran channelId migration for trigger ${trigger.id}`)
             trigger.channelId = `<#${trigger.channelId}>`
             await this.set(trigger)
         }
@@ -38,6 +40,7 @@ export class TriggerStorage extends KeyValueStorage<Trigger> {
         }
         const filteredTriggers = triggers.filter((i) => i.code !== pollCode)
         await this.provider.set(this.guild, this.idStorageName, triggers.filter((i) => i.code !== pollCode))
+        getLogger().debug(`Removed trigger by poll code ${pollCode}`)
         return triggers.length - filteredTriggers.length;
     }
 
@@ -47,6 +50,7 @@ export class TriggerStorage extends KeyValueStorage<Trigger> {
         if (triggers.findIndex((trigger) => Number(trigger.id) === Number(triggerId)) === -1) {
             return false;
         }
+        getLogger().debug(`Removed trigger by id ${triggerId}`)
         await this.provider.set(this.guild, this.idStorageName, triggers.filter((i) => Number(i.id) !== Number(triggerId)))
         return true;
     }

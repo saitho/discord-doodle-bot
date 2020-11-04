@@ -6,6 +6,7 @@ import {User} from "./functions/user";
 import {CommandoClient} from "discord.js-commando";
 import {DoodlePreferencesType} from "./doodle/preferences_type";
 import {Guild} from "discord.js";
+import {getLogger} from "log4js";
 
 export interface PollResult {
     date: string;
@@ -24,6 +25,7 @@ export class Template {
         const resultsFunc = new Results(poll)
         const usersFunc = new User(client, guild)
 
+        getLogger().debug(`Parsing message "${condition}" via Template`)
         return template(condition)({
             poll: poll,
             p: poll,

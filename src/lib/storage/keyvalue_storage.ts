@@ -1,5 +1,6 @@
 import {Guild} from "discord.js";
 import {SettingProvider} from "discord.js-commando";
+import {getLogger} from "log4js";
 
 export abstract class KeyValueStorage<V> {
     protected provider: SettingProvider;
@@ -21,6 +22,7 @@ export abstract class KeyValueStorage<V> {
         if (items.indexOf(id) !== -1) {
             return false;
         }
+        getLogger().debug(`Adding data to storage "${this.idStorageName}"`, id)
         await this.provider.set(this.guild, this.idStorageName, [...items, id])
         return true;
     }
@@ -30,6 +32,7 @@ export abstract class KeyValueStorage<V> {
         if (polls.indexOf(id) !== -1) {
             return false;
         }
+        getLogger().debug(`Removing data from storage "${this.idStorageName}"`, id)
         await this.provider.set(this.guild, this.idStorageName, polls.filter((item) => item !== id))
         return true;
     }

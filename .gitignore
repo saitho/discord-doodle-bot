@@ -3,3 +3,6 @@ node_modules/
 
 # do not commit config.json as it may contain sensitive data
 config.json
+
+log
+.idea

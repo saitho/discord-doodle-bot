@@ -3,6 +3,7 @@ import axios from "axios";
 import {ObjectStorage} from "./object_storage";
 import DoodleEvent from "../doodle/event";
 import DoodleParticipant from "../doodle/participant";
+import {getLogger} from "log4js";
 
 export class PollStorage extends ObjectStorage<DoodleReducedResult, string> {
     idStorageName = 'polls'
@@ -15,6 +16,7 @@ export class PollStorage extends ObjectStorage<DoodleReducedResult, string> {
                 title: '',
                 participants: []
             };
+            getLogger().debug(`Fetching latest Doodle data for code "${code}"`)
             axios.get('https://doodle.com/api/v2.0/polls/' + code)
                 .then((result) => {
                     if (result.status !== 200) {
@@ -43,6 +45,7 @@ export class PollStorage extends ObjectStorage<DoodleReducedResult, string> {
                     type: item
                 }
             });
+        getLogger().debug(`Added participant`, participant)
         result.participants.push({
             ...participant,
             readableDates: (dates as {date: string; type: Number}[])

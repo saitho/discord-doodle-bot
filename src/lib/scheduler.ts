@@ -2,6 +2,7 @@ import * as cron from "node-cron"
 import {Trigger} from "./trigger";
 import {TriggerExecutor} from "./trigger_executor";
 import {CommandoClient} from "discord.js-commando";
+import {getLogger} from "log4js";
 
 export class Scheduler {
     private static instance: Scheduler;
@@ -26,14 +27,17 @@ export class Scheduler {
     }
 
     public schedule(client: CommandoClient, trigger: Trigger) {
+        getLogger().debug('Scheduling trigger', trigger)
         const oldTask = this.tasks.get(trigger)
         if (oldTask) {
+            getLogger().debug('Removed old task before rescheduling trigger')
             oldTask.destroy();
         }
         const task = cron.schedule(trigger.executionTime, async () => {
             await TriggerExecutor.executeSingle(client, trigger)
         });
         this.tasks.set(trigger, task)
+        getLogger().debug('Starting task', task)
         task.start();
     }
 }

@@ -1,4 +1,5 @@
 import {KeyValueStorage} from "./keyvalue_storage";
+import {getLogger} from "log4js";
 
 export abstract class ObjectStorage<T, V> extends KeyValueStorage<V> {
     protected abstract objectStoragePrefix: string
@@ -24,6 +25,7 @@ export abstract class ObjectStorage<T, V> extends KeyValueStorage<V> {
                 reject(null)
             }
             const result = await this.mapIdToObject(id)
+            getLogger().debug(`Updating object "${this.objectStoragePrefix + id}"`, id)
             await this.provider.set(this.guild, this.objectStoragePrefix + id, result)
             resolve(result)
         })
