@@ -65,7 +65,7 @@ bot.on("ready", async () => {
 
     await bot.user.setPresence({
         game: {
-            name: "They like it bot",
+            name: "Some like it bot",
             type: "WATCHING"
         }
     })
