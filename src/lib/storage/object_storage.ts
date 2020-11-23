@@ -16,7 +16,7 @@ export abstract class ObjectStorage<T, V> extends KeyValueStorage<V> {
         return true;
     }
 
-    protected abstract async mapIdToObject(id: V): Promise<T>;
+    protected abstract mapIdToObject(id: V): Promise<T>;
 
     public async update(id: V): Promise<T> {
         return new Promise<T>(async (resolve, reject) => {
