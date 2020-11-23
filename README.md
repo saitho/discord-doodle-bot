@@ -114,6 +114,8 @@ You can use these to access certain information about the poll or participants t
 * `d.tomorrow` - Tomorrow's date in format YYYY-MM-DD
 * `d.yesterday` - Yesterday's date in format YYYY-MM-DD
 * `d.plusDays(days: number)` - Date today + given days in format YYYY-MM-DD
+* `d.thisWeek` - Date range for current week. Result has to match every day in the range to be considered relevant.
+* `d.nextWeek` - Date range for next week. Result has to match every day in the range to be considered relevant.
 
 ### user / u
 

@@ -1,5 +1,6 @@
 dependencies:
   axios: 0.20.0
+  date-fns: 2.16.1
   discord.js: 11.6.4
   discord.js-commando: 0.10.0_discord.js@11.6.4+sqlite@3.0.6
   lodash: 4.17.20
@@ -262,6 +263,12 @@ packages:
       node: '>=8'
     resolution:
       integrity: sha512-v1plID3y9r/lPhviJ1wrXpLeyUIGAZ2SHNYTEapm7/8A9nLPoyvVp3RK/EPFqn5kEznyWgYZNsRtYYIWbuG8KA==
+  /date-fns/2.16.1:
+    dev: false
+    engines:
+      node: '>=0.11'
+    resolution:
+      integrity: sha512-sAJVKx/FqrLYHAQeN7VpJrPhagZc9R4ImZIWYRFZaaohR3KzmuK88touwsSwSVT8Qcbd4zoDsnGfX4GFB4imyQ==
   /date-format/2.1.0:
     dev: false
     engines:
@@ -1419,6 +1426,7 @@ specifiers:
   '@types/lodash': ^4.14.161
   '@types/node': ^12.12.58
   axios: ^0.20.0
+  date-fns: ^2.16.1
   discord.js: ^11.6.4
   discord.js-commando: ^0.10.0
   lodash: ^4.17.20

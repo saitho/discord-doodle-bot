@@ -1,4 +1,6 @@
 import {Template} from "../template";
+import {startOfWeek, addDays} from 'date-fns'
+
 
 export class Results {
     protected poll: Template
@@ -7,24 +9,56 @@ export class Results {
         this.poll = poll
     }
 
-    public yesUser(date: string): string[] {
+    protected getDateRange(dateFormat: string): Date[] {
+        const rangeType = dateFormat.split(':')[0]
+        const dates: Date[] = [];
+        let start = 0;
+        if (rangeType === 'nextWeek') {
+            start = 7;
+        }
+        const weekStart = startOfWeek(Date.now(), {weekStartsOn: 1});
+        for (let i = start; i < start+7; i++) {
+            dates.push(addDays(weekStart, i))
+        }
+        return dates;
+    }
+
+    protected getPollUsers(key: string, date: string) {
+        if (date.startsWith('range:')) {
+            let results: string[] = [];
+            const dates = this.getDateRange(date);
+            for (let i = 0; i < dates.length; i++) {
+                const dateString = dates[i].toISOString().split('T')[0];
+                const result = this.poll.results.get(dateString);
+                if (result) {
+                    if (i === 0) {
+                        results = result[key];
+                        continue;
+                    }
+                    results = results.filter(x => result[key].includes(x));
+                }
+            }
+
+            return results;
+        }
         const results = this.poll.results.get(date)
-        return results ? results.yesUser : []
+        return results ? results[key] : []
+    }
+
+    public yesUser(date: string): string[] {
+        return this.getPollUsers('yesUser', date);
     }
 
     public noUser(date: string): string[] {
-        const results = this.poll.results.get(date)
-        return results ? results.noUser : []
+        return this.getPollUsers('noUser', date);
     }
 
     public maybeUser(date: string): string[] {
-        const results = this.poll.results.get(date)
-        return results ? results.maybeUser : []
+        return this.getPollUsers('maybeUser', date);
     }
 
     public undecidedUser(date: string): string[] {
-        const results = this.poll.results.get(date)
-        return results ? results.undecidedUser : []
+        return this.getPollUsers('undecidedUser', date);
     }
 
     public yes(date: string): number {

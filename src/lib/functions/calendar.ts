@@ -8,6 +8,12 @@ export class Calendar {
     get yesterday(): string {
         return this.plusDays(-1)
     }
+    get thisWeek(): string {
+        return 'range:thisWeek'
+    }
+    get nextWeek(): string {
+        return 'range:nextWeek'
+    }
     plusDays(days: number): string {
         const date = new Date(new Date().getTime() + days * 24 * 60 * 60 * 1000)
         return date.toISOString().split('T')[0]

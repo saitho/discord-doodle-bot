@@ -10,6 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "axios": "^0.20.0",
+    "date-fns": "^2.16.1",
     "discord.js": "^11.6.4",
     "discord.js-commando": "^0.10.0",
     "lodash": "^4.17.20",
