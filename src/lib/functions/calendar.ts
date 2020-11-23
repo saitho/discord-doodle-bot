@@ -9,10 +9,13 @@ export class Calendar {
         return this.plusDays(-1)
     }
     get thisWeek(): string {
-        return 'range:thisWeek'
+        return this.weekFromNow(0)
     }
     get nextWeek(): string {
-        return 'range:nextWeek'
+        return this.weekFromNow(1)
+    }
+    weekFromNow(week: number): string {
+        return 'range:weekFromNow:' + week
     }
     plusDays(days: number): string {
         const date = new Date(new Date().getTime() + days * 24 * 60 * 60 * 1000)

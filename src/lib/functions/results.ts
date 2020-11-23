@@ -10,14 +10,17 @@ export class Results {
     }
 
     protected getDateRange(dateFormat: string): Date[] {
-        const rangeType = dateFormat.split(':')[0]
+        const rangeSettings = dateFormat.split(':')
+        const rangeType = rangeSettings[1]
         const dates: Date[] = [];
-        let start = 0;
-        if (rangeType === 'nextWeek') {
-            start = 7;
+        if (rangeType !== 'weekFromNow') {
+            return dates;
         }
-        const weekStart = startOfWeek(Date.now(), {weekStartsOn: 1});
-        for (let i = start; i < start+7; i++) {
+        const rangeWeekOffset = rangeSettings[2]
+        const start = 7 * Number(rangeWeekOffset);
+        const startDate = addDays(new Date(Date.now()), start);
+        const weekStart = startOfWeek(startDate, {weekStartsOn: 1});
+        for (let i = 1; i < 8; i++) { // not sure why but we need range (1,8] to get all dates of the week
             dates.push(addDays(weekStart, i))
         }
         return dates;

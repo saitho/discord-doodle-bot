@@ -116,6 +116,7 @@ You can use these to access certain information about the poll or participants t
 * `d.plusDays(days: number)` - Date today + given days in format YYYY-MM-DD
 * `d.thisWeek` - Date range for current week. Result has to match every day in the range to be considered relevant.
 * `d.nextWeek` - Date range for next week. Result has to match every day in the range to be considered relevant.
+* `d.weekFromNow(n: number)` - Date range for n-th week from now. Result has to match every day in the range to be considered relevant.
 
 ### user / u
 
