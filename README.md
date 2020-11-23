@@ -126,3 +126,26 @@ You can use these to access certain information about the poll or participants t
 
 * `p.results`: Map<string, PollResult> (use `results` instead)
 * `p.participant`: Map<string, DiscordParticipant>
+
+## Example triggers
+
+### Participants of a day
+
+In this example an event is possible of 6 or more have voted for "yes" or "maybe" for the next day.
+If this is the case, it will send a list of "yes" and "maybe" user names to the #dev Discord channel.
+That check will run everyday at 6pm (GMT?).
+
+```
+.trigger-add "DOODLECODE" "${r.yes(d.tomorrow) + r.maybe(d.tomorrow) >= 6}" "${d.tomorrow} ${r.yesUser(d.tomorrow).join(',')} ${r.maybeUser(d.tomorrow).join(',')}" "0 18 * * *" #dev false
+```
+
+You may add more commands like this with `d.plusDays(n)` instead of `d.tomorrow` (n=1..7) to cover a full week.
+
+### Participants that have not voted
+
+Get a list of all participants that have not voted for all days of next week.
+A participant has not voted when "?" are set on Doodle (i.e. after additional options were added since the last vote).
+
+```
+.trigger-add "DOODLECODE" "${r.undecided(d.nextWeek) >= 0}" " ${r.undecidedUser(d.nextWeek).join(',')}" "0 0 0 * * *" #dev false
+```
