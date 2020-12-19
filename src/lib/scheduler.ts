@@ -7,7 +7,7 @@ import {getLogger} from "log4js";
 export class Scheduler {
     private static instance: Scheduler;
 
-    private tasks = new Map<Trigger, cron.Task>();
+    private tasks = new Map<Trigger, cron.Task[]>();
 
     public static getInstance(): Scheduler {
         if (!Scheduler.instance) {
@@ -21,23 +21,31 @@ export class Scheduler {
             if (trigger.id !== parseInt(triggerId)) {
                 continue;
             }
-            this.tasks.get(trigger).destroy();
+            for (const task of this.tasks.get(trigger)!) {
+                task.destroy();
+            }
             this.tasks.delete(trigger)
         }
     }
 
     public schedule(client: CommandoClient, trigger: Trigger) {
         getLogger().debug('Scheduling trigger', trigger)
-        const oldTask = this.tasks.get(trigger)
-        if (oldTask) {
+        const oldTasks = this.tasks.get(trigger)
+        if (oldTasks) {
             getLogger().debug('Removed old task before rescheduling trigger')
-            oldTask.destroy();
+            for (const task of oldTasks) {
+                task.destroy();
+            }
         }
-        const task = cron.schedule(trigger.executionTime, async () => {
-            await TriggerExecutor.executeSingle(client, trigger)
-        });
-        this.tasks.set(trigger, task)
-        getLogger().debug('Starting task', task)
-        task.start();
+        const tasks: cron.Task[] = [];
+        for (const executionTime of trigger.executionTime.split(';')) {
+            const task = cron.schedule(trigger.executionTime, async () => {
+                await TriggerExecutor.executeSingle(client, trigger)
+            });
+            getLogger().debug('Starting task for trigger ' + trigger.id + ' at ' + executionTime, task)
+            task.start()
+            tasks.push(task)
+        }
+        this.tasks.set(trigger, tasks)
     }
 }

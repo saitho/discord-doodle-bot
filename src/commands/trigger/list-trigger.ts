@@ -27,11 +27,12 @@ module.exports = class InfoCommand extends Command {
                 triggerEmbed = new RichEmbed()
             }
             const trigger = triggers[i]
+            const executionTimes = trigger.executionTime.split(';');
             triggerEmbed
                 .addField('Enabled?', `${trigger.enabled ? 'yes' : 'no'}`)
                 .addField('Poll', `[${trigger.code}](${DoodleUtility.getPollUrl(trigger.code)})`)
                 .addField('Condition', `\`${trigger.condition}\``)
-                .addField('Execution cron time', `\`${trigger.executionTime}\``)
+                .addField('Execution cron time', executionTimes.map((item) => '`' + item + '`').join(' '))
                 .addField('Message', trigger.message)
                 .addField('Receiver', `${trigger.channelId}`)
                 .addField('Remove after execution?', trigger.removeAfterExecution)
