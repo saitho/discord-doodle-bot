@@ -9,19 +9,19 @@
   "author": "abyssal512",
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.20.0",
-    "date-fns": "^2.16.1",
+    "axios": "^0.21.1",
+    "date-fns": "^2.19.0",
     "discord.js": "^11.6.4",
     "discord.js-commando": "^0.10.0",
-    "lodash": "^4.17.20",
+    "lodash": "^4.17.21",
     "log4js": "^6.3.0",
     "node-cron": "^2.0.3",
     "sqlite": "^3.0.6"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.161",
+    "@types/lodash": "^4.14.168",
     "@types/node": "^12.12.58",
-    "nodemon": "^2.0.4",
-    "typescript": "^4.0.3"
+    "nodemon": "^2.0.7",
+    "typescript": "^4.2.3"
   }
 }

@@ -1,18 +1,18 @@
 dependencies:
-  axios: 0.20.0
-  date-fns: 2.16.1
+  axios: 0.21.1
+  date-fns: 2.19.0
   discord.js: 11.6.4
   discord.js-commando: 0.10.0_discord.js@11.6.4+sqlite@3.0.6
-  lodash: 4.17.20
+  lodash: 4.17.21
   log4js: 6.3.0
   node-cron: 2.0.3
   sqlite: 3.0.6
 devDependencies:
-  '@types/lodash': 4.14.161
+  '@types/lodash': 4.14.168
   '@types/node': 12.12.58
-  nodemon: 2.0.4
-  typescript: 4.0.3
-lockfileVersion: 5.1
+  nodemon: 2.0.7
+  typescript: 4.2.3
+lockfileVersion: 5.2
 packages:
   /@sindresorhus/is/0.14.0:
     dev: true
@@ -32,10 +32,10 @@ packages:
     dev: true
     resolution:
       integrity: sha512-rr+OQyAjxze7GgWrSaJwydHStIhHq2lvY3BOC2Mj7KnzI7XK0Uw1TOOdI9lDoajEbSWLiYgoo4f1R51erQfhPQ==
-  /@types/lodash/4.14.161:
+  /@types/lodash/4.14.168:
     dev: true
     resolution:
-      integrity: sha512-EP6O3Jkr7bXvZZSZYlsgt5DIjiGr0dXP1/jVEwVLTFgg0d+3lWVQkRavYVQszV7dYUwvg0B8R0MBDpcmXg7XIA==
+      integrity: sha512-oVfRvqHV/V6D1yifJbVRU3TMp8OT6o6BG+U9MkwuJ3U8/CsDHvalRpsxBqivn71ztOFZBTfJMvETbqHiaNSj7Q==
   /@types/node/12.12.58:
     dev: true
     resolution:
@@ -100,12 +100,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-csOlWGAcRFJaI6m+F2WKdnMKr4HhdhFVBk0H/QbJFMCr+uO2kwohwXQPxw/9OCxp05r5ghVBFSyioixx3gfkNQ==
-  /axios/0.20.0:
+  /axios/0.21.1:
     dependencies:
       follow-redirects: 1.13.0
     dev: false
     resolution:
-      integrity: sha512-ANA4rr2BDcmmAQLOKft2fufrtuvlqR+cXNNinUmvfeSNCOF98PZL+7M/v1zIdGo7OLjEA9J2gXJL+j4zGsl0bA==
+      integrity: sha512-dKQiRHxGD9PPRIUNIWvZhPTPpl1rf/OxTYKsqKUDjBwYylTvV7SjSHJb9ratfyzM6wCdLCOYLzs73qpg5c4iGA==
   /balanced-match/1.0.0:
     resolution:
       integrity: sha1-ibTRmasr7kneFk6gK4nORi1xt2c=
@@ -263,12 +263,12 @@ packages:
       node: '>=8'
     resolution:
       integrity: sha512-v1plID3y9r/lPhviJ1wrXpLeyUIGAZ2SHNYTEapm7/8A9nLPoyvVp3RK/EPFqn5kEznyWgYZNsRtYYIWbuG8KA==
-  /date-fns/2.16.1:
+  /date-fns/2.19.0:
     dev: false
     engines:
       node: '>=0.11'
     resolution:
-      integrity: sha512-sAJVKx/FqrLYHAQeN7VpJrPhagZc9R4ImZIWYRFZaaohR3KzmuK88touwsSwSVT8Qcbd4zoDsnGfX4GFB4imyQ==
+      integrity: sha512-X3bf2iTPgCAQp9wvjOQytnf5vO5rESYRXlPIVcgSbtT5OTScPcsf9eZU+B/YIkKAtYr5WeCii58BgATrNitlWg==
   /date-format/2.1.0:
     dev: false
     engines:
@@ -290,6 +290,7 @@ packages:
   /debug/3.2.6:
     dependencies:
       ms: 2.1.2
+    deprecated: Debug versions >=3.2.0 <3.2.7 || >=4 <4.3.1 have a low-severity ReDos regression when used in a Node.js environment. It is recommended you upgrade to 3.2.7 or 4.3.1. (https://github.com/visionmedia/debug/issues/797)
     resolution:
       integrity: sha512-mel+jf7nrtEl5Pn1Qx46zARXKDpBbvzezse7p7LqINmdoIk8PYP5SySaxEmYv6TZ0JyEKA1hsCId6DIhgITtWQ==
   /debug/4.2.0:
@@ -464,6 +465,7 @@ packages:
     resolution:
       integrity: sha1-FQStJSMVjKpA20onh8sBQRmU6k8=
   /fsevents/2.1.3:
+    deprecated: '"Please update to latest v2.3 or v2.2"'
     dev: true
     engines:
       node: ^8.16.0 || ^10.6.0 || >=11.0.0
@@ -617,6 +619,7 @@ packages:
     resolution:
       integrity: sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==
   /ini/1.3.5:
+    deprecated: Please update to ini >=1.3.6 to avoid a prototype pollution issue
     resolution:
       integrity: sha512-RZY5huIKCMRWDUqZlEi72f/lmXKMvuszcMBduliQ3nnWbx9X/ZBQO7DijMEYS9EhHBb2qacRUMtC7svLwe0lcw==
   /is-binary-path/2.1.0:
@@ -737,10 +740,10 @@ packages:
       node: '>=8'
     resolution:
       integrity: sha512-weT+r0kTkRQdCdYCNtkMwWXQTMEswKrFBkm4ckQOMVhhqhIMI1UT2hMj+1iigIhgSZm5gTmrRXBNoGUgaTY1xA==
-  /lodash/4.17.20:
+  /lodash/4.17.21:
     dev: false
     resolution:
-      integrity: sha512-PlhdFcillOINfeV7Ni6oF1TAEayyZBoZ8bcshTHqOYJYlrqzRK5hagpagky5o4HfCzzd1TRkXPMFq6cKk9rGmA==
+      integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
   /log4js/6.3.0:
     dependencies:
       date-format: 3.0.0
@@ -818,10 +821,10 @@ packages:
   /ms/2.1.2:
     resolution:
       integrity: sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==
-  /nan/2.14.1:
+  /nan/2.14.2:
     dev: false
     resolution:
-      integrity: sha512-isWHgVjnFjh2x2yuJ/tj3JbwoHu3UC2dX5G/88Cm24yB6YopVgxvBObDY7n5xW6ExmFhJpSEQqFPvq9zaXc8Jw==
+      integrity: sha512-M2ufzIiINKCuDfBSAUr1vWQ+vuVcA9kqx8JJUsbQi6yf1uGRyb7HfpdfUr5qLXf3B/t8dPvcjhKMmlfnP47EzQ==
   /needle/2.5.2:
     dependencies:
       debug: 3.2.6
@@ -855,11 +858,12 @@ packages:
       rimraf: 2.7.1
       semver: 5.7.1
       tar: 4.4.13
+    deprecated: 'Please upgrade to @mapbox/node-pre-gyp: the non-scoped node-pre-gyp package is deprecated and only the @mapbox scoped package will recieve updates in the future'
     dev: false
     hasBin: true
     resolution:
       integrity: sha512-TwWAOZb0j7e9eGaf9esRx3ZcLaE5tQ2lvYy1pb5IAaG1a2e2Kv5Lms1Y4hpj+ciXJRofIxxlt5haeQ/2ANeE0Q==
-  /nodemon/2.0.4:
+  /nodemon/2.0.7:
     dependencies:
       chokidar: 3.4.2
       debug: 3.2.6
@@ -877,7 +881,7 @@ packages:
     hasBin: true
     requiresBuild: true
     resolution:
-      integrity: sha512-Ltced+hIfTmaS28Zjv1BM552oQ3dbwPqI4+zI0SLgq+wpJhSyqgYude/aZa/3i31VCQWMfXJVxvu86abcam3uQ==
+      integrity: sha512-XHzK69Awgnec9UzHr1kc8EomQh4sjTQ8oRf8TsGrSmHDx9/UmiGG9E/mM3BuTfNeFwdNBvrqQq/RHL0xIeyFOA==
   /nopt/1.0.10:
     dependencies:
       abbrev: 1.1.1
@@ -1163,7 +1167,7 @@ packages:
       integrity: sha512-5SW7HcN+s3TyqpsxOujXhQDCRSCgsxdiU0peT/Y9CT5T0rAsGLwtpXcMyQ7OzOPQ4YUZ5XiGlrwuuQbszr2xtw==
   /sqlite3/4.2.0:
     dependencies:
-      nan: 2.14.1
+      nan: 2.14.2
       node-pre-gyp: 0.11.0
     dev: false
     requiresBuild: true
@@ -1317,13 +1321,13 @@ packages:
     dev: true
     resolution:
       integrity: sha512-zdu8XMNEDepKKR+XYOXAVPtWui0ly0NtohUscw+UmaHiAWT8hrV1rr//H6V+0DvJ3OQ19S979M0laLfX8rm82Q==
-  /typescript/4.0.3:
+  /typescript/4.2.3:
     dev: true
     engines:
       node: '>=4.2.0'
     hasBin: true
     resolution:
-      integrity: sha512-tEu6DGxGgRJPb/mVPIZ48e69xCn2yRmCgYmDugAVwmJ6o+0u1RI18eO7E7WBTLYLaEVVOhwQmcdhQHweux/WPg==
+      integrity: sha512-qOcYwxaByStAWrBf4x0fibwZvMRG+r4cQoTjbPtUlrWjBHbmCAww1i448U0GJ+3cNNEtebDteo/cHOR3xJ4wEw==
   /tz-offset/0.0.1:
     dev: false
     resolution:
@@ -1423,15 +1427,15 @@ packages:
     resolution:
       integrity: sha512-a4UGQaWPH59mOXUYnAG2ewncQS4i4F43Tv3JoAM+s2VDAmS9NsK8GpDMLrCHPksFT7h3K6TOoUNn2pb7RoXx4g==
 specifiers:
-  '@types/lodash': ^4.14.161
+  '@types/lodash': ^4.14.168
   '@types/node': ^12.12.58
-  axios: ^0.20.0
-  date-fns: ^2.16.1
+  axios: ^0.21.1
+  date-fns: ^2.19.0
   discord.js: ^11.6.4
   discord.js-commando: ^0.10.0
-  lodash: ^4.17.20
+  lodash: ^4.17.21
   log4js: ^6.3.0
   node-cron: ^2.0.3
-  nodemon: ^2.0.4
+  nodemon: ^2.0.7
   sqlite: ^3.0.6
-  typescript: ^4.0.3
+  typescript: ^4.2.3
