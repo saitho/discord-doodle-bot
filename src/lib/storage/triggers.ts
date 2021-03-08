@@ -3,6 +3,7 @@ import {KeyValueStorage} from "./keyvalue_storage";
 import {SettingProvider} from "discord.js-commando";
 import {Guild} from "discord.js";
 import {getLogger} from "log4js";
+import {Scheduler} from "../scheduler";
 
 export class TriggerStorage extends KeyValueStorage<Trigger> {
     idStorageName = 'triggers'
@@ -50,6 +51,7 @@ export class TriggerStorage extends KeyValueStorage<Trigger> {
         if (triggers.findIndex((trigger) => Number(trigger.id) === Number(triggerId)) === -1) {
             return false;
         }
+        Scheduler.getInstance().unschedule(triggerId.toString())
         getLogger().debug(`Removed trigger by id ${triggerId}`)
         await this.provider.set(this.guild, this.idStorageName, triggers.filter((i) => Number(i.id) !== Number(triggerId)))
         return true;
